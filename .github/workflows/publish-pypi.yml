@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: reference/python
-        run: pip install -e '.[dev,all]'
+        run: pip install -e '.[dev,http]'
 
       - name: Run tests
         working-directory: reference/python
