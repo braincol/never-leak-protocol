@@ -1,0 +1,163 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NL Protocol for AI Platform Builders — NL Protocol</title>
+    <meta name="description" content="For engineers at LLM companies and agent orchestration platforms: learn how to integrate the Never-Leak Protocol into your AI platform." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="home" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 pt-8">
+        <a href="/get-started" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          All paths
+        </a>
+      </div>
+
+      <!-- Hero -->
+      <section class="py-12 sm:py-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <span class="pill mb-6 inline-flex">Platform Guide</span>
+          <h1 class="text-3xl sm:text-5xl font-extrabold mb-5 tracking-tight">
+            NL Protocol for <span class="gradient-text">AI Platform Builders</span>
+          </h1>
+          <p class="text-lg text-nl-text-secondary max-w-3xl leading-relaxed">
+            Integrate NL Protocol into your LLM platform or agent orchestration framework to provide built-in secret governance.
+          </p>
+        </div>
+      </section>
+
+      <!-- You are -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8">
+            <div class="flex items-start gap-4">
+              <span class="w-10 h-10 rounded-xl bg-nl-cyan/10 text-nl-cyan flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+              </span>
+              <div>
+                <h2 class="font-semibold text-nl-text text-lg mb-2">You are</h2>
+                <p class="text-nl-text-secondary leading-relaxed">
+                  An engineer at an LLM company (OpenAI, Anthropic, Google, etc.) or agent orchestration platform (LangChain, CrewAI, AutoGen) looking to add native secret governance to your platform.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key areas -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Key areas of focus</h2>
+          <div class="glass-card p-6 sm:p-8">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Platform integration patterns</strong> &mdash; how to embed NL Protocol into your agent runtime, tool execution layer, or MCP server</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Attestation mechanisms</strong> &mdash; agent identity documents, cryptographic signatures, and trust level verification</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Transport bindings</strong> &mdash; HTTP, stdio, and WebSocket transport specifications for the wire protocol</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Multi-region federation</strong> &mdash; cross-agent trust, delegation tokens, and result-only propagation across distributed systems</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recommended path -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Recommended path</h2>
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">1</span>
+              <div>
+                <a href="/learn/concepts" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Understand core concepts</a>
+                <p class="text-sm text-nl-text-secondary">Opaque handles, scope grants, isolation boundaries, and the action-based access model.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">2</span>
+              <div>
+                <a href="/spec/00-overview" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Review protocol levels</a>
+                <p class="text-sm text-nl-text-secondary">Seven independent layers from agent identity through cross-agent trust and federation.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">3</span>
+              <div>
+                <a href="/spec/08-wire-protocol" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Explore the wire protocol spec</a>
+                <p class="text-sm text-nl-text-secondary">JSON schemas, message types, transport bindings, and error handling for platform integration.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-amber/10 text-nl-amber flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">4</span>
+              <div>
+                <a href="/spec" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Browse integration guides</a>
+                <p class="text-sm text-nl-text-secondary">Reference implementation patterns, conformance testing, and platform-specific guidance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Time commitment -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8 border-l-4 border-l-nl-cyan">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-nl-cyan shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div>
+                <h3 class="font-semibold text-nl-text mb-1">Time commitment</h3>
+                <p class="text-sm text-nl-text-secondary">~25 minutes for the conceptual overview, ~1 day for a wire protocol integration prototype.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTAs -->
+      <section class="pb-8">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/spec/08-wire-protocol" class="btn-primary">
+              Explore Integration
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+            <a href="/spec" class="btn-ghost">
+              View Full Spec
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

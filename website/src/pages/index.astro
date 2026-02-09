@@ -1,0 +1,676 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+
+const levels = [
+  {
+    number: 1,
+    title: "Agent Identity",
+    icon: "🪪",
+    description: "Cryptographic identity with attestation, lifecycle management, and trust levels (L0-L3).",
+    color: "cyan",
+  },
+  {
+    number: 2,
+    title: "Action-Based Access",
+    icon: "⚡",
+    description: "Agents request actions, not secrets. Scoped grants with time bounds, usage limits, and conditions.",
+    color: "cyan",
+  },
+  {
+    number: 3,
+    title: "Execution Isolation",
+    icon: "🔒",
+    description: "Secrets live only inside isolated subprocesses. No shell expansion, no core dumps, memory wiped on exit.",
+    color: "cyan",
+  },
+  {
+    number: 4,
+    title: "Pre-Execution Defense",
+    icon: "🛡️",
+    description: "Command interception, pattern analysis, and anomaly detection before any secret is resolved.",
+    color: "violet",
+  },
+  {
+    number: 5,
+    title: "Audit Integrity",
+    icon: "📋",
+    description: "SHA-256 hash-chained, HMAC-signed, tamper-evident audit records for every agent-secret interaction.",
+    color: "violet",
+  },
+  {
+    number: 6,
+    title: "Attack Detection",
+    icon: "🔍",
+    description: "Real-time behavioral analysis, prompt injection detection, and automated response to threats.",
+    color: "violet",
+  },
+  {
+    number: 7,
+    title: "Cross-Agent Trust",
+    icon: "🤝",
+    description: "Delegation tokens, trust federation, and result-only propagation across multi-agent pipelines.",
+    color: "green",
+  },
+];
+
+const tiers = [
+  {
+    name: "Basic",
+    levels: "Levels 1 – 3",
+    description: "Identity, action-based access, and execution isolation. The foundation for any NL-compliant system.",
+    features: [
+      "Agent Identity Documents (AID)",
+      "Opaque handle resolution",
+      "Scope grants with conditions",
+      "Isolated subprocess execution",
+      "Result sanitization",
+    ],
+  },
+  {
+    name: "Standard",
+    levels: "Levels 1 – 5",
+    description: "Adds pre-execution defense and immutable audit trails. Required for production environments.",
+    features: [
+      "Everything in Basic",
+      "Command interception & analysis",
+      "Pattern-based anomaly detection",
+      "SHA-256 hash-chained audit log",
+      "HMAC-signed audit records",
+      "Tamper-evident verification",
+    ],
+    highlighted: true,
+  },
+  {
+    name: "Advanced",
+    levels: "Levels 1 – 7",
+    description: "Full protocol with attack detection and cross-agent trust. For enterprise and multi-agent orchestration.",
+    features: [
+      "Everything in Standard",
+      "Real-time behavioral analysis",
+      "Prompt injection detection",
+      "Delegation tokens",
+      "Trust federation",
+      "Result-only propagation",
+    ],
+  },
+];
+
+const standards = [
+  "OWASP Top 10",
+  "OWASP LLM Top 10",
+  "OWASP MCP Top 10",
+  "OWASP Agentic Top 10",
+  "RFC 2119",
+  "RFC 7519 (JWT)",
+  "RFC 9180 (HPKE)",
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <title>Never-Leak Protocol — The Open Standard for AI Agent Secret Security</title>
+    <meta name="description" content="NL Protocol is an open specification that defines how AI agents interact with secrets without those secrets ever entering the agent's context window. Agents request actions, not secrets." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Never-Leak Protocol" />
+    <meta property="og:description" content="The open standard for AI agent secret security. Agents request actions, not secrets." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://neverleakprotocol.org" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Styles are imported in frontmatter -->
+  </head>
+
+  <body class="min-h-screen overflow-x-hidden">
+
+    <Navbar current="home" />
+
+    <!-- ============================================
+         Hero
+         ============================================ -->
+    <section class="relative min-h-screen flex items-center justify-center dot-grid pt-20 overflow-hidden">
+      <!-- Single subtle glow — emerald toned -->
+      <div class="absolute -top-40 left-1/3 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] rounded-full opacity-40 pointer-events-none" style="background: radial-gradient(circle, rgba(52,211,153,0.08) 0%, transparent 70%); filter: blur(80px);"></div>
+
+      <div class="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 text-center">
+        <!-- Brand -->
+        <div class="fade-in mb-6">
+          <span class="text-emerald-400 text-xs sm:text-sm font-semibold tracking-widest uppercase font-mono">Never-Leak Protocol</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="fade-in fade-in-delay-1 text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-5">
+          The open standard for<br />
+          <span class="gradient-text">AI agent secret governance</span>.
+        </h1>
+
+        <!-- Core principle -->
+        <p class="fade-in fade-in-delay-2 text-xl sm:text-2xl font-semibold text-nl-text/80 mb-10">
+          Agents request actions, not <span class="text-emerald-400">secrets</span>.
+        </p>
+
+        <!-- CTAs -->
+        <div class="fade-in fade-in-delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <a href="/spec" class="btn-primary">
+            Read the Spec
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+          <a href="#get-started" class="btn-ghost">
+            Get Started
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </a>
+        </div>
+
+        <!-- Code preview — the hook -->
+        <div class="fade-in fade-in-delay-4 max-w-2xl mx-auto">
+          <div class="code-block p-4 sm:p-6 text-left overflow-x-auto">
+            <div class="text-nl-text-tertiary text-xs mb-4 font-mono uppercase tracking-widest">How it works</div>
+            <pre class="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-all sm:whitespace-pre sm:break-normal"><span class="comment">// The agent sees a handle, never the secret value</span>
+<span class="keyword">action_request</span>{`({
+  "type": "exec",
+  "template": "curl -H 'Authorization: Bearer `}<span class="placeholder">{'{{nl:api-key}}'}</span>{`' https://api.example.com",
+  "purpose": "Fetch user profile"
+})`}
+
+<span class="comment">// The system resolves, injects, executes in isolation</span>
+<span class="comment">// Agent receives only the result — never the secret</span>
+<span class="keyword">action_response</span>{`({
+  "status": "success",
+  "stdout": "{\\"user\\": \\"alice\\", \\"plan\\": \\"enterprise\\"}"
+})`}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Problem Statement
+         ============================================ -->
+    <section class="relative py-12 sm:py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+          <!-- Left: Problem -->
+          <div>
+            <span class="pill mb-6 inline-flex">The Problem</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+              The agent's context is<br />
+              <span class="text-red-400">adversarial territory</span>.
+            </h2>
+            <div class="space-y-4 text-nl-text-secondary leading-relaxed">
+              <p>AI agents are gaining the ability to read files, execute code, call APIs, and manage infrastructure. Each capability requires secrets.</p>
+              <p>Current practice treats agents like human users: secrets are retrieved and placed into the agent's working memory. This is fundamentally unsafe.</p>
+            </div>
+            <ul class="mt-8 space-y-3">
+              <li class="flex items-start gap-3">
+                <span class="text-red-400 mt-1">✕</span>
+                <span class="text-nl-text-secondary">Any data in an LLM context can be memorized or exfiltrated via prompt injection</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-red-400 mt-1">✕</span>
+                <span class="text-nl-text-secondary">Agents inherit ambient authority with no per-task scoping</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-red-400 mt-1">✕</span>
+                <span class="text-nl-text-secondary">Multi-agent delegation multiplies the exfiltration surface</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-red-400 mt-1">✕</span>
+                <span class="text-nl-text-secondary">Audit trails are mutable, unsigned, and missing agent metadata</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Right: Solution -->
+          <div>
+            <span class="pill mb-6 inline-flex" style="border-color: rgba(34,197,94,0.2); color: #22C55E; background: rgba(34,197,94,0.05);">The Solution</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+              A protocol where secrets are<br />
+              <span class="text-nl-green">architecturally invisible</span>.
+            </h2>
+            <div class="space-y-4 text-nl-text-secondary leading-relaxed">
+              <p>NL Protocol shifts the paradigm: agents work with <strong class="text-nl-text">opaque handles</strong> (<code class="text-nl-cyan font-mono text-sm">{'{{nl:...}}'}</code>), never values.</p>
+              <p>The system resolves, injects, and executes inside an isolation boundary. The agent gets only the result.</p>
+            </div>
+            <ul class="mt-8 space-y-3">
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-1">✓</span>
+                <span class="text-nl-text-secondary">Zero-knowledge: secrets never enter the context window</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-1">✓</span>
+                <span class="text-nl-text-secondary">Per-agent, per-secret, time-bounded scope grants</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-1">✓</span>
+                <span class="text-nl-text-secondary">Delegation tokens with bounded lifetime and use count</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-1">✓</span>
+                <span class="text-nl-text-secondary">SHA-256 hash-chained, HMAC-signed, tamper-evident audit</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Audience Quick-Nav
+         ============================================ -->
+    <section id="get-started" class="relative py-12 sm:py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="pill mb-6 inline-flex">Get Started</span>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+            Find your path through the protocol
+          </h2>
+          <p class="text-nl-text-secondary max-w-2xl mx-auto">
+            Select your role for a tailored introduction to the Never-Leak Protocol.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Card 1: Developer -->
+          <a href="/get-started/for-developers" class="glass-card shimmer-border p-6 group hover:border-nl-cyan/30 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold font-mono bg-nl-cyan/10 text-nl-cyan">{ }</span>
+              <div class="font-semibold text-nl-text">I'm a Developer</div>
+            </div>
+            <p class="text-sm text-nl-text-secondary leading-relaxed mb-4">
+              Implementation guides, code examples, and API references for building NL-compliant systems.
+            </p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-cyan transition-colors">&rarr;</span>
+          </a>
+
+          <!-- Card 2: Security -->
+          <a href="/get-started/for-architects" class="glass-card shimmer-border p-6 group hover:border-nl-violet/30 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold font-mono bg-nl-violet/10 text-nl-violet">&#x1F6E1;</span>
+              <div class="font-semibold text-nl-text">I lead Security</div>
+            </div>
+            <p class="text-sm text-nl-text-secondary leading-relaxed mb-4">
+              Threat models, compliance mapping, and audit verification for security teams.
+            </p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-violet transition-colors">&rarr;</span>
+          </a>
+
+          <!-- Card 3: AI Platforms -->
+          <a href="/get-started/for-framework-builders" class="glass-card shimmer-border p-6 group hover:border-nl-green/30 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold font-mono bg-nl-green/10 text-nl-green">&#x2699;</span>
+              <div class="font-semibold text-nl-text">I build AI Platforms</div>
+            </div>
+            <p class="text-sm text-nl-text-secondary leading-relaxed mb-4">
+              Integration patterns, attestation, and transport binding for agent framework builders.
+            </p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-green transition-colors">&rarr;</span>
+          </a>
+
+          <!-- Card 4: Product / Business -->
+          <a href="/get-started/for-product-teams" class="glass-card shimmer-border p-6 group hover:border-nl-amber/30 transition-colors">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold font-mono bg-nl-amber/10 text-nl-amber">&#x1F4CA;</span>
+              <div class="font-semibold text-nl-text">I'm in Product / Business</div>
+            </div>
+            <p class="text-sm text-nl-text-secondary leading-relaxed mb-4">
+              Business value, competitive landscape, and adoption strategy for product leaders.
+            </p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-amber transition-colors">&rarr;</span>
+          </a>
+
+          <!-- Card 5: Infrastructure (centered on last row) -->
+          <a href="/get-started/for-enterprises" class="glass-card shimmer-border p-6 group hover:border-nl-cyan/30 transition-colors sm:col-span-2 lg:col-span-1">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold font-mono bg-nl-cyan/10 text-nl-cyan">&#x2601;</span>
+              <div class="font-semibold text-nl-text">I run Infrastructure</div>
+            </div>
+            <p class="text-sm text-nl-text-secondary leading-relaxed mb-4">
+              Deployment guides, operational runbooks, and compliance for enterprise teams.
+            </p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-cyan transition-colors">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         7 Levels
+         ============================================ -->
+    <section id="levels" class="relative py-12 sm:py-16">
+
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="pill mb-6 inline-flex">Defense in Depth</span>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+            Seven independent layers of protection
+          </h2>
+          <p class="text-nl-text-secondary max-w-2xl mx-auto">
+            Each level addresses a distinct threat surface. Adopt incrementally — a failure at one layer does not compromise the system if other layers are intact.
+          </p>
+        </div>
+
+        <!-- Bento grid -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {levels.map((level) => (
+            <div class={`glass-card shimmer-border p-6 ${level.number === 7 ? 'sm:col-span-2 lg:col-span-1' : ''}`}>
+              <div class="flex items-center gap-3 mb-4">
+                <span class={`
+                  w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold font-mono
+                  ${level.color === 'cyan' ? 'bg-nl-cyan/10 text-nl-cyan' : ''}
+                  ${level.color === 'violet' ? 'bg-nl-violet/10 text-nl-violet' : ''}
+                  ${level.color === 'green' ? 'bg-nl-green/10 text-nl-green' : ''}
+                `}>
+                  {level.number}
+                </span>
+                <div>
+                  <div class="font-semibold text-nl-text">{level.title}</div>
+                  <div class="text-xs text-nl-text-tertiary font-mono">Level {level.number}</div>
+                </div>
+              </div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                {level.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Conformance Tiers
+         ============================================ -->
+    <section id="conformance" class="relative py-12 sm:py-16">
+
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="pill mb-6 inline-flex">Conformance</span>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+            Adopt incrementally, certify progressively
+          </h2>
+          <p class="text-nl-text-secondary max-w-2xl mx-auto">
+            Three conformance tiers let implementations start simple and grow. Each tier is a strict superset of the previous.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 pt-6">
+          {tiers.map((tier) => (
+            <div class={`glass-card p-8 relative ${tier.highlighted ? 'ring-1 ring-nl-cyan/30' : ''}`}>
+              {tier.highlighted && (
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                  <span class="bg-nl-cyan text-nl-base text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider whitespace-nowrap">Recommended</span>
+                </div>
+              )}
+              <h3 class="text-2xl font-bold mb-1">{tier.name}</h3>
+              <div class="text-sm text-nl-cyan font-mono mb-4">{tier.levels}</div>
+              <p class="text-sm text-nl-text-secondary mb-6 leading-relaxed">{tier.description}</p>
+              <ul class="space-y-2">
+                {tier.features.map((feature) => (
+                  <li class="flex items-start gap-2 text-sm">
+                    <span class="text-nl-green mt-0.5 shrink-0">✓</span>
+                    <span class="text-nl-text-secondary">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Standards Alignment
+         ============================================ -->
+    <section class="py-16 border-y border-nl-border">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 flex-wrap">
+          <span class="text-xs sm:text-sm text-nl-text-tertiary uppercase tracking-widest font-mono shrink-0 w-full sm:w-auto text-center mb-2 sm:mb-0">Aligned with</span>
+          {standards.map((s) => (
+            <span class="text-xs sm:text-sm text-nl-text-secondary font-mono border border-nl-border rounded-lg px-2 sm:px-4 py-1.5 sm:py-2">{s}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Code Example
+         ============================================ -->
+    <section id="example" class="relative py-12 sm:py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+          <!-- Left: Explanation -->
+          <div>
+            <span class="pill mb-6 inline-flex">Wire Protocol</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6">
+              Simple JSON messages,<br />
+              <span class="gradient-text-subtle">powerful guarantees</span>
+            </h2>
+            <p class="text-nl-text-secondary mb-8 leading-relaxed">
+              The wire protocol uses JSON over standard transports (HTTP, stdio, WebSocket). Every message is structured, typed, and carries the agent's identity context.
+            </p>
+
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">1</span>
+                <div>
+                  <div class="font-semibold text-nl-text mb-1">Agent sends action request</div>
+                  <p class="text-sm text-nl-text-secondary">Template contains opaque handles (<code class="text-nl-cyan font-mono">{'{{nl:...}}'}</code>), typed action, purpose string, and scope context.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">2</span>
+                <div>
+                  <div class="font-semibold text-nl-text mb-1">System resolves and executes</div>
+                  <p class="text-sm text-nl-text-secondary">Identity verified, scope evaluated, secrets resolved inside isolation boundary, output sanitized.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">3</span>
+                <div>
+                  <div class="font-semibold text-nl-text mb-1">Agent receives result only</div>
+                  <p class="text-sm text-nl-text-secondary">stdout, stderr, exit code — never secret values. Audit record written to hash chain.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Code blocks -->
+          <div class="space-y-4">
+            <div class="code-block p-3 sm:p-5">
+              <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Action Request</div>
+              <pre class="text-xs sm:text-sm leading-relaxed">{`{
+  `}<span class="string">"version"</span>: <span class="string">"1.0"</span>,
+  <span class="string">"type"</span>: <span class="string">"action_request"</span>,
+  <span class="string">"agent_id"</span>: <span class="string">"nl://anthropic/claude-code/4.0"</span>,
+  <span class="string">"action"</span>: {`{
+    `}<span class="string">"type"</span>: <span class="string">"exec"</span>,
+    <span class="string">"template"</span>: <span class="string">"psql postgresql://<span class="placeholder">{'{{nl:db/user}}'}</span>:<span class="placeholder">{'{{nl:db/pass}}'}</span>@host/mydb -c 'SELECT 1'"</span>,
+    <span class="string">"purpose"</span>: <span class="string">"Health check on production database"</span>
+  {`}`},
+  <span class="string">"scope"</span>: {`{
+    `}<span class="string">"project"</span>: <span class="string">"myapp"</span>,
+    <span class="string">"environment"</span>: <span class="string">"production"</span>
+  {`}`}
+{`}`}</pre>
+            </div>
+
+            <div class="code-block p-3 sm:p-5">
+              <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Action Response</div>
+              <pre class="text-xs sm:text-sm leading-relaxed">{`{
+  `}<span class="string">"version"</span>: <span class="string">"1.0"</span>,
+  <span class="string">"type"</span>: <span class="string">"action_response"</span>,
+  <span class="string">"status"</span>: <span class="string">"success"</span>,
+  <span class="string">"result"</span>: {`{
+    `}<span class="string">"exit_code"</span>: <span class="keyword">0</span>,
+    <span class="string">"stdout"</span>: <span class="string">"(1 row)\\n 1"</span>,
+    <span class="string">"stderr"</span>: <span class="string">""</span>
+  {`}`},
+  <span class="string">"audit_ref"</span>: <span class="string">"sha256:a1b2c3..."</span>
+{`}`}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Design Principles
+         ============================================ -->
+    <section class="relative py-12 sm:py-16">
+
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="pill mb-6 inline-flex">Principles</span>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+            Built on eight design principles
+          </h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="glass-card p-6">
+            <div class="text-nl-cyan font-bold text-lg mb-2">Zero Trust</div>
+            <p class="text-sm text-nl-text-secondary">No agent, tool, or message is trusted without explicit verification.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-cyan font-bold text-lg mb-2">Secrets Are Opaque</div>
+            <p class="text-sm text-nl-text-secondary">Agents interact with references, never values. The handle carries no information.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-violet font-bold text-lg mb-2">Least Privilege</div>
+            <p class="text-sm text-nl-text-secondary">Agents receive only the permissions necessary to complete a specific task.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-violet font-bold text-lg mb-2">Defense in Depth</div>
+            <p class="text-sm text-nl-text-secondary">Security at seven independent layers. One failure doesn't compromise the system.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-green font-bold text-lg mb-2">Auditability</div>
+            <p class="text-sm text-nl-text-secondary">Every action produces an immutable, cryptographically chained record.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-green font-bold text-lg mb-2">Governance First</div>
+            <p class="text-sm text-nl-text-secondary">Who can do what, when, under what conditions — as a first-class concern.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-amber font-bold text-lg mb-2">Interoperability</div>
+            <p class="text-sm text-nl-text-secondary">Works across frameworks, model providers, cloud platforms, and topologies.</p>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-nl-amber font-bold text-lg mb-2">Correct by Default</div>
+            <p class="text-sm text-nl-text-secondary">Secure behavior is default. Insecure configurations require explicit opt-in.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Implementations
+         ============================================ -->
+    <section class="relative py-12 sm:py-16 border-t border-nl-border">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <span class="pill mb-6 inline-flex">Ecosystem</span>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+            Reference Implementation
+          </h2>
+          <p class="text-nl-text-secondary max-w-2xl mx-auto">
+            NL Protocol is an open standard. Anyone can build a conformant implementation. Here's who's building today.
+          </p>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+          <div class="glass-card shimmer-border p-8">
+            <div class="flex flex-col sm:flex-row items-start gap-6">
+              <div class="w-14 h-14 rounded-2xl bg-nl-overlay flex items-center justify-center shrink-0">
+                <svg class="w-8 h-8" viewBox="0 0 140 140" fill="none"><polygon points="25,50 70,27 70,95 25,118" fill="#1d4ed8"/><polygon points="70,27 115,50 115,118 70,95" fill="#1e40af"/><polygon points="25,50 70,27 115,50 70,73" fill="#3b82f6"/><circle cx="92" cy="82" r="14" fill="none" stroke="#60a5fa" stroke-width="2.5"/><circle cx="92" cy="82" r="3" fill="#60a5fa"/><line x1="33" y1="70" x2="62" y2="82" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/><line x1="33" y1="82" x2="62" y2="94" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/><line x1="33" y1="94" x2="62" y2="106" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-3 mb-2">
+                  <h3 class="text-xl font-bold">Braincol Vault</h3>
+                  <span class="text-xs font-mono text-nl-green border border-nl-green/20 rounded-full px-2 py-0.5 bg-nl-green/5">NL Standard (L1-L5)</span>
+                </div>
+                <p class="text-nl-text-secondary text-sm mb-4 leading-relaxed">
+                  The first and reference implementation of the NL Protocol. Local-first secret manager with MCP server integration, supporting 7 AI agents out of the box. X25519 + ChaCha20-Poly1305 encryption, hash-chained audit, and multi-user RBAC.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-5">
+                  <span class="text-xs font-mono text-nl-text-tertiary bg-nl-overlay rounded px-2 py-1">Python</span>
+                  <span class="text-xs font-mono text-nl-text-tertiary bg-nl-overlay rounded px-2 py-1">MCP</span>
+                  <span class="text-xs font-mono text-nl-text-tertiary bg-nl-overlay rounded px-2 py-1">1,051 tests</span>
+                  <span class="text-xs font-mono text-nl-text-tertiary bg-nl-overlay rounded px-2 py-1">Apache 2.0 + BSAL</span>
+                </div>
+                <a href="https://vault.braincol.com" class="text-sm text-nl-cyan hover:underline font-medium">
+                  vault.braincol.com →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-12">
+          <p class="text-nl-text-tertiary text-sm">
+            Building an NL-compliant system? <a href="https://github.com/braincol/never-leak-protocol" class="text-nl-cyan hover:underline">Open an issue</a> to get listed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         CTA
+         ============================================ -->
+    <section class="relative py-8 sm:py-10">
+
+      <div class="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+          <span class="gradient-text">Join the standard.</span>
+        </h2>
+        <p class="text-lg text-nl-text-secondary mb-8 leading-relaxed">
+          NL Protocol is open-source under Apache 2.0. Read the specification, build a conformant implementation, or contribute to the standard.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="https://github.com/braincol/never-leak-protocol" class="btn-primary">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+          <a href="/spec" class="btn-ghost">
+            Read Specification
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Footer
+         ============================================ -->
+    <footer class="border-t border-nl-border py-12">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-3">
+            <img src="/favicon.svg" alt="" class="h-6 w-6 opacity-60" />
+            <span class="text-sm text-nl-text-tertiary">
+              Never-Leak Protocol — Apache 2.0
+            </span>
+          </div>
+          <div class="flex items-center gap-6 text-sm text-nl-text-tertiary">
+            <a href="https://github.com/braincol/never-leak-protocol" class="hover:text-nl-text-secondary transition-colors">GitHub</a>
+            <a href="https://github.com/braincol/never-leak-protocol/tree/main/specification/v1.0" class="hover:text-nl-text-secondary transition-colors">Spec</a>
+            <span class="text-nl-text-tertiary/50">|</span>
+            <span>
+              Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

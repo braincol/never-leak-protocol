@@ -1,0 +1,163 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NL Protocol for Security Teams — NL Protocol</title>
+    <meta name="description" content="Security architects, CISOs, and compliance officers: review the NL Protocol threat model, compliance mapping, and audit capabilities for AI agent secret governance." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="home" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 pt-8">
+        <a href="/get-started" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          All paths
+        </a>
+      </div>
+
+      <!-- Hero -->
+      <section class="py-12 sm:py-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <span class="pill mb-6 inline-flex" style="border-color: rgba(139,92,246,0.2); color: #8B5CF6; background: rgba(139,92,246,0.05);">Security Guide</span>
+          <h1 class="text-3xl sm:text-5xl font-extrabold mb-5 tracking-tight">
+            NL Protocol for <span class="gradient-text">Security Teams</span>
+          </h1>
+          <p class="text-lg text-nl-text-secondary max-w-3xl leading-relaxed">
+            Evaluate the protocol's threat model, compliance alignment, and audit capabilities for your organization.
+          </p>
+        </div>
+      </section>
+
+      <!-- You are -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8">
+            <div class="flex items-start gap-4">
+              <span class="w-10 h-10 rounded-xl bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </span>
+              <div>
+                <h2 class="font-semibold text-nl-text text-lg mb-2">You are</h2>
+                <p class="text-nl-text-secondary leading-relaxed">
+                  A security architect, CISO, compliance officer, or auditor responsible for evaluating and governing how AI agents interact with sensitive credentials and secrets.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key areas -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Key areas of focus</h2>
+          <div class="glass-card p-6 sm:p-8">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Threat model</strong> &mdash; how NL Protocol addresses prompt injection, secret exfiltration, privilege escalation, and multi-agent delegation attacks</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Compliance mapping</strong> &mdash; alignment with SOC 2, ISO 27001, OWASP Top 10, and OWASP LLM/Agentic frameworks</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Audit trail verification</strong> &mdash; SHA-256 hash-chained, HMAC-signed records with tamper-evident guarantees</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Attack detection</strong> &mdash; real-time behavioral analysis, anomaly detection, and automated threat response capabilities</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recommended path -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Recommended path</h2>
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">1</span>
+              <div>
+                <a href="/learn/concepts" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Review the threat model</a>
+                <p class="text-sm text-nl-text-secondary">Understand which attack surfaces NL Protocol addresses and the defense-in-depth approach across 7 layers.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">2</span>
+              <div>
+                <a href="/learn/concepts" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Compare with alternatives</a>
+                <p class="text-sm text-nl-text-secondary">How NL Protocol differs from vault integrations, environment variables, and other secret management approaches.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">3</span>
+              <div>
+                <a href="/spec" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Read the full specification</a>
+                <p class="text-sm text-nl-text-secondary">All 7 levels, wire protocol, cryptographic requirements, and security guarantees in detail.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-amber/10 text-nl-amber flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">4</span>
+              <div>
+                <a href="/spec/00-overview" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Evaluate conformance tiers</a>
+                <p class="text-sm text-nl-text-secondary">Three tiers (Basic, Standard, Advanced) map to different organizational maturity levels and compliance needs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Time commitment -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8 border-l-4 border-l-nl-violet">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-nl-violet shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div>
+                <h3 class="font-semibold text-nl-text mb-1">Time commitment</h3>
+                <p class="text-sm text-nl-text-secondary">~20 minutes for the threat model overview, ~1-2 hours for a full specification review.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTAs -->
+      <section class="pb-8">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/learn/concepts" class="btn-primary">
+              Review Threat Model
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+            <a href="/spec" class="btn-ghost">
+              Read Full Spec
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

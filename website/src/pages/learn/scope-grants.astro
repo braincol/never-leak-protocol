@@ -1,0 +1,230 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scope Grants — NL Protocol</title>
+    <meta name="description" content="Learn how the Never-Leak Protocol uses scope grants for fine-grained, time-bounded, per-agent access control over secrets. Understand the anatomy of a scope grant and the subset rule." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="learn" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 mb-8">
+        <a href="/learn" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors">
+          &larr; Back to Learn
+        </a>
+      </div>
+
+      <!-- Header -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="pill">Concept</span>
+          <span class="text-xs text-nl-text-tertiary font-mono">5 min read</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight">
+          Scope Grants: <span class="text-nl-cyan">Fine-Grained Access Control</span> for AI Agents
+        </h1>
+        <p class="text-nl-text-secondary leading-relaxed">
+          Scope grants are the permission model of the Never-Leak Protocol. They define exactly what an agent can do with a specific secret, with built-in expiration, usage limits, and conditions.
+        </p>
+      </div>
+
+      <!-- Section 1: What is a Scope Grant? -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">What is a Scope Grant?</h2>
+        <div class="text-nl-text-secondary leading-relaxed space-y-4">
+          <p>
+            A <strong class="text-nl-text">scope grant</strong> is a permission object that defines exactly what an agent can do with a specific secret. Unlike traditional role-based access control (RBAC) where a role grants broad access to many resources, scope grants are deliberately narrow: one agent, one secret, one set of allowed actions, with explicit conditions.
+          </p>
+          <p>
+            Think of it this way: RBAC says "this user is an admin, so they can do anything." A scope grant says "this agent can use <em>this specific secret</em> for <em>these specific action types</em>, only until <em>this date</em>, and only <em>this many times</em>."
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 2: Anatomy of a Scope Grant -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">Anatomy of a Scope Grant</h2>
+        <p class="text-nl-text-secondary leading-relaxed mb-6">
+          Every scope grant is a structured JSON object that specifies the secret, the allowed actions, and the conditions under which the grant is valid.
+        </p>
+
+        <div class="code-block p-4 sm:p-5">
+          <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Scope Grant Object</div>
+          <pre class="text-xs sm:text-sm leading-relaxed">{`{
+  `}<span class="string">"secret"</span>: <span class="string">"production/db-password"</span>,
+  <span class="string">"actions"</span>: [<span class="string">"exec"</span>, <span class="string">"template"</span>],
+  <span class="string">"conditions"</span>: {`{
+    `}<span class="string">"valid_from"</span>: <span class="string">"2026-01-01T00:00:00Z"</span>,
+    <span class="string">"valid_until"</span>: <span class="string">"2026-03-01T00:00:00Z"</span>,
+    <span class="string">"max_uses"</span>: <span class="keyword">100</span>,
+    <span class="string">"ip_whitelist"</span>: [<span class="string">"10.0.0.0/8"</span>]
+  {`}`}
+{`}`}</pre>
+        </div>
+
+        <div class="mt-6 text-nl-text-secondary leading-relaxed space-y-3">
+          <p>
+            Let's break this down. The <code class="text-nl-cyan font-mono text-xs">secret</code> field identifies which secret this grant applies to, using a path-based naming convention. The <code class="text-nl-cyan font-mono text-xs">actions</code> array lists the specific action types the agent is allowed to perform. And the <code class="text-nl-cyan font-mono text-xs">conditions</code> object sets the boundaries.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 3: Key Properties -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">Key Properties</h2>
+
+        <div class="glass-card p-6 space-y-5">
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center shrink-0 mt-0.5 font-mono text-sm font-bold">T</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Time-bounded</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Every grant has a <code class="text-nl-cyan font-mono text-xs">valid_from</code> and <code class="text-nl-cyan font-mono text-xs">valid_until</code> timestamp. Grants expire automatically -- there is no such thing as a permanent scope grant. If an agent needs continued access, a new grant must be issued.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center shrink-0 mt-0.5 font-mono text-sm font-bold">#</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Usage-limited</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The <code class="text-nl-cyan font-mono text-xs">max_uses</code> field caps how many times the secret can be accessed under this grant. This prevents an agent from making an unbounded number of requests, even within the time window. Once the limit is reached, the grant is exhausted.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5 font-mono text-sm font-bold">?</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Conditional</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Grants can include additional conditions like IP whitelists, environment constraints (e.g., only in <code class="text-nl-cyan font-mono text-xs">staging</code>), or required metadata fields. These conditions are evaluated at request time, and any failure means the request is denied.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5 font-mono text-sm font-bold">!</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Action-typed</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The <code class="text-nl-cyan font-mono text-xs">actions</code> array restricts which types of operations the agent can perform. A grant allowing <code class="text-nl-cyan font-mono text-xs">exec</code> does not automatically allow <code class="text-nl-cyan font-mono text-xs">read</code>. Action types include <code class="text-nl-cyan font-mono text-xs">exec</code> (execute a command), <code class="text-nl-cyan font-mono text-xs">template</code> (populate a template), and <code class="text-nl-cyan font-mono text-xs">read</code> (read the value directly, if permitted).
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: The Subset Rule -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">The Subset Rule</h2>
+        <div class="text-nl-text-secondary leading-relaxed space-y-4">
+          <p>
+            One of the most important security properties of scope grants is the <strong class="text-nl-text">subset rule</strong>: when one agent delegates access to another agent, the delegated scope can <em>only</em> be equal to or <em>narrower</em> than the original.
+          </p>
+          <p>
+            This means no agent can escalate its own privileges or grant more access than it has. If Agent A has a scope grant allowing 100 uses until March 1st, it can delegate to Agent B with 50 uses until February 15th, but it cannot delegate 200 uses or extend the expiration.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <div class="code-block p-4 sm:p-5">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Subset Rule Example</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment">// Agent A's scope grant</span>
+{`{`} <span class="string">"secret"</span>: <span class="string">"prod/api-key"</span>, <span class="string">"actions"</span>: [<span class="string">"exec"</span>, <span class="string">"template"</span>], <span class="string">"max_uses"</span>: <span class="keyword">100</span> {`}`}
+
+<span class="comment">// Agent A delegates to Agent B (valid - narrower scope)</span>
+{`{`} <span class="string">"secret"</span>: <span class="string">"prod/api-key"</span>, <span class="string">"actions"</span>: [<span class="string">"exec"</span>], <span class="string">"max_uses"</span>: <span class="keyword">50</span> {`}`}
+
+<span class="comment">// Agent A tries to delegate more (REJECTED - violates subset rule)</span>
+{`{`} <span class="string">"secret"</span>: <span class="string">"prod/api-key"</span>, <span class="string">"actions"</span>: [<span class="string">"exec"</span>, <span class="string">"read"</span>], <span class="string">"max_uses"</span>: <span class="keyword">200</span> {`}`}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Comparison -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-16">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">How It Compares</h2>
+        <p class="text-nl-text-secondary leading-relaxed mb-6">
+          Scope grants take the best ideas from existing access control models and adapt them for the unique challenges of AI agent security.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr>
+                <th class="text-left font-semibold text-nl-text py-3 px-4 border-b-2 border-nl-border bg-nl-surface/50">Property</th>
+                <th class="text-left font-semibold text-nl-text py-3 px-4 border-b-2 border-nl-border bg-nl-surface/50">Traditional RBAC</th>
+                <th class="text-left font-semibold text-nl-text py-3 px-4 border-b-2 border-nl-border bg-nl-surface/50">OAuth Scopes</th>
+                <th class="text-left font-semibold text-nl-cyan py-3 px-4 border-b-2 border-nl-border bg-nl-surface/50">NL Scope Grants</th>
+              </tr>
+            </thead>
+            <tbody class="text-nl-text-secondary">
+              <tr>
+                <td class="py-2.5 px-4 border-b border-nl-border font-medium text-nl-text">Granularity</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">Role-level</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">API-level</td>
+                <td class="py-2.5 px-4 border-b border-nl-border text-nl-cyan">Per-secret, per-action</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 border-b border-nl-border font-medium text-nl-text">Expiration</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">Manual removal</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">Token expiry</td>
+                <td class="py-2.5 px-4 border-b border-nl-border text-nl-cyan">Built-in, mandatory</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 border-b border-nl-border font-medium text-nl-text">Usage limits</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">None</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">Rate limits</td>
+                <td class="py-2.5 px-4 border-b border-nl-border text-nl-cyan">Per-grant max uses</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 border-b border-nl-border font-medium text-nl-text">Delegation</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">Not supported</td>
+                <td class="py-2.5 px-4 border-b border-nl-border">Limited</td>
+                <td class="py-2.5 px-4 border-b border-nl-border text-nl-cyan">Subset rule enforced</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-medium text-nl-text">Secret visibility</td>
+                <td class="py-2.5 px-4">Full access</td>
+                <td class="py-2.5 px-4">Full access</td>
+                <td class="py-2.5 px-4 text-nl-cyan">Opaque handles only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6">
+        <div class="border-t border-nl-border pt-8 flex items-center justify-between">
+          <a href="/learn/opaque-handles" class="text-sm text-nl-cyan hover:text-nl-cyan/80 transition-colors font-medium">
+            &larr; Opaque Handles
+          </a>
+          <a href="/learn/delegation-tokens" class="text-sm text-nl-cyan hover:text-nl-cyan/80 transition-colors font-medium">
+            Next: Delegation Tokens &rarr;
+          </a>
+        </div>
+      </div>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

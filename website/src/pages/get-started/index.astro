@@ -1,0 +1,121 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+
+const roles = [
+  {
+    title: "Developers",
+    description: "Backend, DevOps, and security engineers building NL-compliant systems.",
+    href: "/get-started/for-developers",
+    time: "~30 min read",
+    color: "cyan",
+  },
+  {
+    title: "Security Teams",
+    description: "Security architects, CISOs, compliance officers, and auditors.",
+    href: "/get-started/for-architects",
+    time: "~20 min read",
+    color: "violet",
+  },
+  {
+    title: "AI Platform Builders",
+    description: "Engineers at LLM companies and agent orchestration platforms.",
+    href: "/get-started/for-framework-builders",
+    time: "~25 min read",
+    color: "cyan",
+  },
+  {
+    title: "Product & Business Leaders",
+    description: "Product managers, engineering leads, founders, and enterprise buyers.",
+    href: "/get-started/for-product-teams",
+    time: "~15 min read",
+    color: "green",
+  },
+  {
+    title: "Enterprise & Operations",
+    description: "Platform engineering and infrastructure teams running agents in production.",
+    href: "/get-started/for-enterprises",
+    time: "~20 min read",
+    color: "amber",
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Choose Your Path — NL Protocol</title>
+    <meta name="description" content="Get started with the Never-Leak Protocol. Choose your role for a personalized introduction to AI agent secret governance." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="home" />
+    <main class="pt-20 pb-20">
+
+      <!-- Hero -->
+      <section class="relative py-16 sm:py-24">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6 text-center">
+          <span class="pill mb-6 inline-flex">Get Started</span>
+          <h1 class="text-3xl sm:text-5xl font-extrabold mb-5 tracking-tight">
+            Choose Your <span class="gradient-text">Path</span>
+          </h1>
+          <p class="text-lg text-nl-text-secondary max-w-2xl mx-auto leading-relaxed">
+            The Never-Leak Protocol serves different needs. Select your role for personalized guidance.
+          </p>
+        </div>
+      </section>
+
+      <!-- Role Cards -->
+      <section class="pb-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="grid gap-4">
+            {roles.map((role) => (
+              <a href={role.href} class="glass-card shimmer-border p-6 sm:p-8 flex items-center justify-between gap-4 group cursor-pointer">
+                <div class="flex items-center gap-4 sm:gap-6 min-w-0">
+                  <span class={`
+                    w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0
+                    ${role.color === 'cyan' ? 'bg-nl-cyan/10 text-nl-cyan' : ''}
+                    ${role.color === 'violet' ? 'bg-nl-violet/10 text-nl-violet' : ''}
+                    ${role.color === 'green' ? 'bg-nl-green/10 text-nl-green' : ''}
+                    ${role.color === 'amber' ? 'bg-nl-amber/10 text-nl-amber' : ''}
+                  `}>
+                    {role.color === 'cyan' && role.title === 'Developers' ? (
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    ) : role.color === 'violet' ? (
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    ) : role.color === 'cyan' ? (
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    ) : role.color === 'green' ? (
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    ) : (
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    )}
+                  </span>
+                  <div class="min-w-0">
+                    <div class="font-semibold text-nl-text text-lg mb-1">{role.title}</div>
+                    <p class="text-sm text-nl-text-secondary truncate sm:whitespace-normal">{role.description}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                  <span class="text-xs text-nl-text-tertiary font-mono hidden sm:block">{role.time}</span>
+                  <svg class="w-5 h-5 text-nl-text-tertiary group-hover:text-nl-cyan group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

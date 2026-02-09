@@ -1,0 +1,125 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+
+const chapters = [
+  { id: '00-overview', num: '00', title: 'Overview', description: 'Goals, architecture, terminology, design principles, and conformance tiers.', level: null },
+  { id: '01-agent-identity', num: '01', title: 'Agent Identity', description: 'Cryptographic identity, Agent Identity Documents (AID), attestation, trust levels (L0-L3), and lifecycle management.', level: 1 },
+  { id: '02-action-based-access', num: '02', title: 'Action-Based Access', description: 'Typed action semantics, opaque handles, scope grants, conditions, and secret rotation propagation.', level: 2 },
+  { id: '03-execution-isolation', num: '03', title: 'Execution Isolation', description: 'Isolated subprocesses, environment scrubbing, output sanitization, memory wipe, and timeout enforcement.', level: 3 },
+  { id: '04-pre-execution-defense', num: '04', title: 'Pre-Execution Defense', description: 'Command interception, injection detection, exfiltration pattern matching, and policy validation.', level: 4 },
+  { id: '05-audit-integrity', num: '05', title: 'Audit Integrity', description: 'SHA-256 hash-chained records, HMAC signatures, tamper-evident verification, and forensic queries.', level: 5 },
+  { id: '06-attack-detection', num: '06', title: 'Attack Detection & Response', description: 'Behavioral anomaly detection, prompt injection detection, circuit breakers, and automated response.', level: 6 },
+  { id: '07-cross-agent-trust', num: '07', title: 'Cross-Agent Trust & Federation', description: 'Delegation tokens, scope attenuation, trust federation, and result-only propagation.', level: 7 },
+  { id: '08-wire-protocol', num: '08', title: 'Wire Protocol & Transport', description: 'JSON message format, transport bindings (HTTP, stdio, WebSocket), MCP integration, and error handling.', level: null },
+];
+
+function levelColor(level: number | null) {
+  if (level === null) return 'nl-text-secondary';
+  if (level <= 3) return 'nl-cyan';
+  if (level <= 6) return 'nl-violet';
+  return 'nl-green';
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Specification — NL Protocol v1.0</title>
+    <meta name="description" content="The full technical specification of the Never-Leak Protocol v1.0. Nine chapters covering agent identity, action-based access, execution isolation, and more." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="spec" />
+
+    <main class="pt-20 pb-20">
+      <!-- Header -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 mb-12 sm:mb-16 text-center">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+          Never-Leak Protocol Specification
+        </h1>
+        <p class="text-sm sm:text-base text-nl-text-secondary max-w-2xl mx-auto mb-6 leading-relaxed">
+          The complete technical specification for the Never-Leak Protocol. Nine chapters defining how AI agents interact with secrets without those secrets ever entering the agent's context window.
+        </p>
+        <div class="flex items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-nl-text-tertiary font-mono">
+          <span>Version 1.0</span>
+          <span>|</span>
+          <span>CC BY 4.0</span>
+          <span>|</span>
+          <span>9 chapters</span>
+        </div>
+      </div>
+
+      <!-- Chapters grid -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6">
+        <div class="space-y-3">
+          {chapters.map((ch) => (
+            <a href={`/spec/${ch.id}`} class="glass-card shimmer-border p-3 sm:p-5 flex items-start gap-3 sm:gap-5 group block">
+              <span class={`
+                w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-xs sm:text-sm font-bold font-mono shrink-0
+                ${ch.level === null ? 'bg-nl-overlay text-nl-text-secondary' : ''}
+                ${ch.level !== null && ch.level <= 3 ? 'bg-nl-cyan/10 text-nl-cyan' : ''}
+                ${ch.level !== null && ch.level >= 4 && ch.level <= 6 ? 'bg-nl-violet/10 text-nl-violet' : ''}
+                ${ch.level === 7 ? 'bg-nl-green/10 text-nl-green' : ''}
+              `}>
+                {ch.num}
+              </span>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
+                  <h2 class="font-semibold text-sm sm:text-base text-nl-text group-hover:text-nl-cyan transition-colors">{ch.title}</h2>
+                  {ch.level !== null && (
+                    <span class={`text-[0.65rem] sm:text-xs font-mono px-1.5 sm:px-2 py-0.5 rounded border
+                      ${ch.level <= 3 ? 'border-nl-cyan/20 text-nl-cyan bg-nl-cyan/5' : ''}
+                      ${ch.level >= 4 && ch.level <= 6 ? 'border-nl-violet/20 text-nl-violet bg-nl-violet/5' : ''}
+                      ${ch.level === 7 ? 'border-nl-green/20 text-nl-green bg-nl-green/5' : ''}
+                    `}>
+                      Level {ch.level}
+                    </span>
+                  )}
+                </div>
+                <p class="text-xs sm:text-sm text-nl-text-secondary leading-relaxed">{ch.description}</p>
+              </div>
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-nl-text-tertiary group-hover:text-nl-text shrink-0 mt-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          ))}
+        </div>
+
+        <!-- Conformance tiers summary -->
+        <div class="mt-12 sm:mt-16 glass-card p-4 sm:p-8">
+          <h3 class="font-bold text-base sm:text-lg mb-4">Conformance Tiers</h3>
+          <div class="grid sm:grid-cols-3 gap-3 sm:gap-4">
+            <div class="p-3 sm:p-4 rounded-lg bg-nl-cyan/5 border border-nl-cyan/10">
+              <div class="font-semibold text-nl-cyan mb-1 text-sm sm:text-base">Basic</div>
+              <div class="text-xs font-mono text-nl-text-tertiary mb-2">Levels 1 - 3</div>
+              <p class="text-xs text-nl-text-secondary">Agent identity, action-based access, execution isolation.</p>
+            </div>
+            <div class="p-3 sm:p-4 rounded-lg bg-nl-violet/5 border border-nl-violet/10">
+              <div class="font-semibold text-nl-violet mb-1 text-sm sm:text-base">Standard</div>
+              <div class="text-xs font-mono text-nl-text-tertiary mb-2">Levels 1 - 5</div>
+              <p class="text-xs text-nl-text-secondary">Adds pre-execution defense and immutable audit trails.</p>
+            </div>
+            <div class="p-3 sm:p-4 rounded-lg bg-nl-green/5 border border-nl-green/10">
+              <div class="font-semibold text-nl-green mb-1 text-sm sm:text-base">Advanced</div>
+              <div class="text-xs font-mono text-nl-text-tertiary mb-2">Levels 1 - 7</div>
+              <p class="text-xs text-nl-text-secondary">Full protocol with attack detection and cross-agent trust.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
