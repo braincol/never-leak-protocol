@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nl-protocol"
-version = "1.0.0a2"
+version = "1.0.0a3"
 description = "Reference implementation of the Never-Leak Protocol for AI agent secret governance"
 readme = "README.md"
 license = "Apache-2.0"
