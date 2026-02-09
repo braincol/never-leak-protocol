@@ -1,0 +1,236 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Delegation Tokens — NL Protocol</title>
+    <meta name="description" content="Learn how the Never-Leak Protocol enables secure multi-agent pipelines with delegation tokens. Understand scope attenuation, depth limits, token binding, and cascade revocation." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="learn" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 mb-8">
+        <a href="/learn" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors">
+          &larr; Back to Learn
+        </a>
+      </div>
+
+      <!-- Header -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="pill" style="border-color: rgba(139,92,246,0.2); color: #8B5CF6; background: rgba(139,92,246,0.05);">Concept</span>
+          <span class="text-xs text-nl-text-tertiary font-mono">5 min read</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight">
+          Delegation Tokens: <span class="text-nl-violet">Secure Multi-Agent Pipelines</span>
+        </h1>
+        <p class="text-nl-text-secondary leading-relaxed">
+          Modern AI systems use orchestrator agents that delegate tasks to specialized sub-agents. Delegation tokens let you share secret access across agent boundaries without ever sharing the secrets themselves.
+        </p>
+      </div>
+
+      <!-- Section 1: The Multi-Agent Problem -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">The Multi-Agent Problem</h2>
+        <div class="text-nl-text-secondary leading-relaxed space-y-4">
+          <p>
+            A single AI agent rarely works alone. In practice, an orchestrator agent breaks a complex task into sub-tasks and delegates each one to a specialized agent. A deployment agent might delegate database migration to a migration agent, API testing to a testing agent, and monitoring setup to an observability agent.
+          </p>
+          <p>
+            The question is: how do you give the migration agent access to the database password without handing over the raw secret? And how do you ensure the migration agent cannot pass that access to yet another agent with broader permissions?
+          </p>
+          <p>
+            Without a structured delegation mechanism, teams resort to sharing secrets directly, copying credentials between agent contexts, or giving all agents the same broad permissions. Each of these approaches expands the attack surface.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 2: How Delegation Works -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">How Delegation Works</h2>
+        <p class="text-nl-text-secondary leading-relaxed mb-6">
+          Delegation tokens create a chain of trust from the original scope grant holder down to sub-agents, with each link in the chain having equal or narrower permissions.
+        </p>
+
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">1</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Orchestrator holds a scope grant</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The orchestrator agent has an existing scope grant for <code class="text-nl-cyan font-mono text-xs">production/api-key</code> with <code class="text-nl-cyan font-mono text-xs">exec</code> and <code class="text-nl-cyan font-mono text-xs">template</code> actions, valid until March 1st, with 100 remaining uses.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">2</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Orchestrator creates a delegation token</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The orchestrator requests a delegation token for the sub-agent with a <em>reduced</em> scope: only <code class="text-nl-cyan font-mono text-xs">exec</code> action, valid until February 15th, with a maximum of 10 uses. The NL System verifies this is a valid subset and issues the token.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">3</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Sub-agent presents the token</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The sub-agent presents the delegation token to the NL System when making action requests. The system validates the token, checks the narrowed scope, and allows the action within those bounds.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">4</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Revocation cascades automatically</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                When the orchestrator's access is revoked -- whether manually, by expiration, or by exhausting its use count -- all delegation tokens derived from that grant are automatically revoked. No orphaned permissions persist.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delegation flow diagram -->
+        <div class="mt-8">
+          <div class="code-block p-4 sm:p-5">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Delegation Chain</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment">Orchestrator Agent</span>
+  <span class="keyword">|</span>  Scope: [exec, template] | max_uses: 100 | until: Mar 1
+  <span class="keyword">|</span>
+  <span class="keyword">|</span>-- <span class="function">delegates to</span> --&gt; <span class="comment">Migration Agent</span>
+  <span class="keyword">|</span>                          Scope: [exec] | max_uses: 10 | until: Feb 15
+  <span class="keyword">|</span>
+  <span class="keyword">|</span>-- <span class="function">delegates to</span> --&gt; <span class="comment">Testing Agent</span>
+                             Scope: [exec] | max_uses: 5 | until: Feb 10
+
+<span class="placeholder">If Orchestrator is revoked =&gt; both tokens are automatically invalidated</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Key Security Properties -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">Key Security Properties</h2>
+
+        <div class="glass-card p-6 space-y-5">
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Scope attenuation</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Every delegation <em>reduces</em> scope. This is the <strong class="text-nl-text">subset rule</strong> in action: the delegated token can only have permissions that are a subset of the delegator's permissions. No agent in the chain can gain more access than the agent above it. Privilege escalation is structurally impossible.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Depth limits</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The protocol enforces a configurable maximum delegation depth (default: 3). This prevents infinite delegation chains where trust becomes impossible to reason about. Agent A can delegate to Agent B, and Agent B can delegate to Agent C, but Agent C cannot delegate further if the depth limit is 3.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Token binding</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Delegation tokens can be optionally bound to a specific agent identity using HMAC-based proof. This means that even if a token is intercepted, only the intended recipient agent can use it. The binding ties the token to the agent's cryptographic identity, preventing token theft.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Cascade revocation</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Revoking a parent's access automatically revokes all downstream delegations. This is recursive: if Agent A is revoked, Agent B's delegated token is revoked, and Agent C's sub-delegation is also revoked. There is no way for a downstream agent to retain access after its upstream chain is broken.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Real-World Example -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-16">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">Real-World Example</h2>
+        <div class="text-nl-text-secondary leading-relaxed space-y-4">
+          <p>
+            Consider a deployment orchestrator agent that manages a code release. The orchestrator has access to the production database password, the deployment API key, and the monitoring service token.
+          </p>
+          <p>
+            When it delegates the database migration task to a specialized migration agent, it creates a delegation token that grants access to <em>only</em> the database password, with <em>only</em> the <code class="text-nl-cyan font-mono text-xs">exec</code> action type, and a <code class="text-nl-cyan font-mono text-xs">max_uses</code> of 5 (enough for the migration script plus a verification query).
+          </p>
+          <p>
+            The migration agent cannot access the deployment API key or the monitoring token. It cannot use the database password for anything other than executing commands. And after 5 uses, the token is exhausted -- even if the migration agent is compromised, the blast radius is strictly bounded.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <div class="code-block p-4 sm:p-5">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Delegation Token Request</div>
+            <pre class="text-xs sm:text-sm leading-relaxed">{`{
+  `}<span class="string">"type"</span>: <span class="string">"delegate"</span>,
+  <span class="string">"from_agent"</span>: <span class="string">"nl://deploy/orchestrator"</span>,
+  <span class="string">"to_agent"</span>: <span class="string">"nl://deploy/migration-agent"</span>,
+  <span class="string">"scope"</span>: {`{
+    `}<span class="string">"secret"</span>: <span class="string">"production/db-password"</span>,
+    <span class="string">"actions"</span>: [<span class="string">"exec"</span>],
+    <span class="string">"conditions"</span>: {`{
+      `}<span class="string">"max_uses"</span>: <span class="keyword">5</span>,
+      <span class="string">"valid_until"</span>: <span class="string">"2026-02-09T12:00:00Z"</span>
+    {`}`}
+  {`}`},
+  <span class="string">"bind_to_agent"</span>: <span class="keyword">true</span>
+{`}`}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6">
+        <div class="border-t border-nl-border pt-8 flex items-center justify-between">
+          <a href="/learn/scope-grants" class="text-sm text-nl-cyan hover:text-nl-cyan/80 transition-colors font-medium">
+            &larr; Scope Grants
+          </a>
+          <a href="/learn/audit-trails" class="text-sm text-nl-cyan hover:text-nl-cyan/80 transition-colors font-medium">
+            Next: Audit Trails &rarr;
+          </a>
+        </div>
+      </div>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

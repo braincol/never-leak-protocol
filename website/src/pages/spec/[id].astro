@@ -1,0 +1,125 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { marked } from 'marked';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+
+const chapters = [
+  { id: '00-overview', file: '00-overview.md', title: 'Overview', short: 'Overview, Goals & Architecture' },
+  { id: '01-agent-identity', file: '01-agent-identity.md', title: 'Level 1: Agent Identity', short: 'Agent Identity' },
+  { id: '02-action-based-access', file: '02-action-based-access.md', title: 'Level 2: Action-Based Access', short: 'Action-Based Access' },
+  { id: '03-execution-isolation', file: '03-execution-isolation.md', title: 'Level 3: Execution Isolation', short: 'Execution Isolation' },
+  { id: '04-pre-execution-defense', file: '04-pre-execution-defense.md', title: 'Level 4: Pre-Execution Defense', short: 'Pre-Execution Defense' },
+  { id: '05-audit-integrity', file: '05-audit-integrity.md', title: 'Level 5: Audit Integrity', short: 'Audit Integrity' },
+  { id: '06-attack-detection', file: '06-attack-detection.md', title: 'Level 6: Attack Detection', short: 'Attack Detection' },
+  { id: '07-cross-agent-trust', file: '07-cross-agent-trust.md', title: 'Level 7: Cross-Agent Trust', short: 'Cross-Agent Trust' },
+  { id: '08-wire-protocol', file: '08-wire-protocol.md', title: 'Wire Protocol', short: 'Wire Protocol & Transport' },
+];
+
+export function getStaticPaths() {
+  return [
+    { params: { id: '00-overview' } },
+    { params: { id: '01-agent-identity' } },
+    { params: { id: '02-action-based-access' } },
+    { params: { id: '03-execution-isolation' } },
+    { params: { id: '04-pre-execution-defense' } },
+    { params: { id: '05-audit-integrity' } },
+    { params: { id: '06-attack-detection' } },
+    { params: { id: '07-cross-agent-trust' } },
+    { params: { id: '08-wire-protocol' } },
+  ];
+}
+
+const { id } = Astro.params;
+const chapter = chapters.find(c => c.id === id)!;
+const currentIndex = chapters.findIndex(c => c.id === id);
+const prevChapter = currentIndex > 0 ? chapters[currentIndex - 1] : null;
+const nextChapter = currentIndex < chapters.length - 1 ? chapters[currentIndex + 1] : null;
+
+const specDir = path.resolve('..', 'specification', 'v1.0');
+const mdContent = fs.readFileSync(path.join(specDir, chapter.file), 'utf-8');
+const htmlContent = await marked.parse(mdContent);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{chapter.title} — NL Protocol Specification</title>
+    <meta name="description" content={`NL Protocol v1.0 specification — ${chapter.title}`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <!-- Styles imported in frontmatter -->
+  </head>
+
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="spec" />
+
+    <!-- Mobile chapter selector -->
+    <div class="lg:hidden fixed top-[52px] left-0 right-0 z-40 border-b border-nl-border bg-nl-base/95 backdrop-blur-xl px-4 sm:px-6 py-3">
+      <select id="chapter-select" class="w-full bg-nl-overlay text-nl-text text-sm rounded-lg border border-nl-border px-3 py-2 font-mono appearance-none cursor-pointer" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238892A8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1rem;">
+        {chapters.map((ch) => (
+          <option value={`/spec/${ch.id}`} selected={ch.id === id}>
+            {ch.id.slice(0, 2)} — {ch.short}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <div class="pt-[52px] lg:pt-[52px]">
+      <!-- Sidebar (desktop) -->
+      <aside class="fixed left-0 top-[52px] bottom-0 w-64 border-r border-nl-border bg-nl-base overflow-y-auto hidden lg:block">
+        <div class="p-4">
+          <div class="text-xs font-mono text-nl-text-tertiary uppercase tracking-widest mb-4">Specification v1.0</div>
+          <nav class="space-y-1">
+            {chapters.map((ch) => (
+              <a
+                href={`/spec/${ch.id}`}
+                class={`block text-sm px-3 py-2 rounded-lg transition-colors ${
+                  ch.id === id
+                    ? 'bg-nl-cyan/10 text-nl-cyan font-medium'
+                    : 'text-nl-text-secondary hover:text-nl-text hover:bg-nl-overlay'
+                }`}
+              >
+                <span class="font-mono text-xs text-nl-text-tertiary mr-2">{ch.id.slice(0, 2)}</span>
+                {ch.short}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="lg:ml-64 min-h-screen pt-[48px] lg:pt-0">
+        <article class="max-w-4xl mx-auto px-4 sm:px-10 py-12 spec-content overflow-hidden" set:html={htmlContent} />
+
+        <!-- Prev / Next navigation -->
+        <div class="max-w-4xl mx-auto px-4 sm:px-10 pb-16">
+          <div class="flex items-center justify-between border-t border-nl-border pt-8">
+            {prevChapter ? (
+              <a href={`/spec/${prevChapter.id}`} class="group flex items-center gap-2 text-sm text-nl-text-secondary hover:text-nl-text transition-colors">
+                <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                {prevChapter.short}
+              </a>
+            ) : <div />}
+            {nextChapter ? (
+              <a href={`/spec/${nextChapter.id}`} class="group flex items-center gap-2 text-sm text-nl-text-secondary hover:text-nl-text transition-colors">
+                {nextChapter.short}
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </a>
+            ) : <div />}
+          </div>
+        </div>
+      </main>
+    </div>
+    <script>
+      document.getElementById('chapter-select')?.addEventListener('change', (e) => {
+        window.location.href = (e.target as HTMLSelectElement).value;
+      });
+    </script>
+  </body>
+</html>

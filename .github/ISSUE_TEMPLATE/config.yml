@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/braincol/never-leak-protocol/security/advisories/new
+    about: Report security vulnerabilities privately. Do not open a public issue.
+  - name: Implementation Support
+    url: https://github.com/braincol/never-leak-protocol/discussions
+    about: Questions about implementing the NL Protocol in your product.

@@ -1,0 +1,158 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+
+const faqs = [
+  {
+    question: "What problem does the NL Protocol solve?",
+    answer: "AI agents increasingly need access to secrets (API keys, database passwords, tokens) to perform tasks. Current practice puts these secrets directly into the agent's context window, where they can be memorized, leaked via prompt injection, or accidentally included in outputs. NL Protocol ensures agents NEVER see secret values — they work with opaque handles, and the system executes actions in isolation.",
+  },
+  {
+    question: "How is this different from just using a secret manager like HashiCorp Vault?",
+    answer: "Traditional secret managers solve storage and rotation, but they still deliver secret values to the requesting application. NL Protocol goes further: the secret value never leaves the isolation boundary. The agent receives only the result of using the secret, not the secret itself. NL Protocol and traditional secret managers are complementary — you'd use Vault to STORE secrets and NL Protocol to GOVERN how agents use them.",
+  },
+  {
+    question: "Does NL Protocol prevent prompt injection?",
+    answer: `NL Protocol doesn't prevent prompt injection attacks from occurring, but it dramatically reduces the IMPACT. Even if an attacker successfully injects a prompt, the agent doesn't have access to secret values — only opaque handles like <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">{{nl:api-key}}</code>. The attacker can't exfiltrate what the agent doesn't have. Additionally, Level 4 (Pre-Execution Defense) includes pattern matching that can detect common injection attempts before they execute.`,
+  },
+  {
+    question: "Which conformance tier should I start with?",
+    answer: `Start with <strong class="text-nl-text">Basic (Levels 1-3)</strong>. This gives you agent identity, action-based access, and execution isolation — the core security guarantees. Most applications should target <strong class="text-nl-text">Standard (Levels 1-5)</strong> for production, which adds pre-execution defense and tamper-evident audit trails. <strong class="text-nl-text">Advanced (Levels 1-7)</strong> is for enterprise multi-agent orchestration with delegation and federation.`,
+  },
+  {
+    question: "How much does implementing NL Protocol slow down my system?",
+    answer: "The primary overhead is subprocess execution for action isolation (Level 3). For most use cases, this adds 10-50ms per action — negligible compared to LLM inference times (typically 1-10 seconds). Output sanitization adds minimal overhead for outputs under 64KB. The security guarantees are worth the small latency cost.",
+  },
+  {
+    question: "Can I adopt NL Protocol incrementally?",
+    answer: "Yes, that's exactly what the conformance tiers are designed for. Implement Basic (L1-3) first — this can be done in a few days. Then add Standard features (L4-5) as needed. Advanced features (L6-7) are only required for multi-agent orchestration with delegation.",
+  },
+  {
+    question: "Is NL Protocol tied to any specific AI provider or model?",
+    answer: "No. NL Protocol is provider-agnostic and model-agnostic. It works with any AI agent system — Claude, GPT, Gemini, Llama, or custom models. The wire protocol uses standard JSON over HTTP, stdio, or WebSocket. The specification includes MCP (Model Context Protocol) integration but supports any transport.",
+  },
+  {
+    question: "What happens if the NL Provider infrastructure is compromised?",
+    answer: "The protocol explicitly documents this trust assumption (Chapter 00, Trust Model Assumptions). A compromised NL Provider could bypass all protections. Mitigations include: immutable external audit backends, separation of key custody, regular cryptographic audits, and HSMs for signing key protection. These are recommended but not required by the spec.",
+  },
+  {
+    question: "How does NL Protocol handle secret rotation?",
+    answer: `Transparently. Since agents use opaque handles (e.g., <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">{{nl:api-key}}</code>), the underlying secret value can be rotated without any agent changes. The handle stays the same; only the resolved value changes. The NL Provider manages rotation according to its own policies, and agents are unaffected.`,
+  },
+  {
+    question: "Is NL Protocol open source? Can I contribute?",
+    answer: `Yes. The specification is licensed under Apache 2.0 and hosted on GitHub. Contributions are welcome — you can open issues, propose changes, or submit implementations. Visit the GitHub repository at <a href="https://github.com/braincol/never-leak-protocol" class="text-nl-cyan hover:underline">github.com/braincol/never-leak-protocol</a>.`,
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FAQ — NL Protocol</title>
+    <meta name="description" content="Frequently asked questions about the Never-Leak Protocol. Learn about conformance tiers, performance, integration with secret managers, and more." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="support" />
+
+    <main class="pt-20 pb-20">
+      <!-- Header -->
+      <section class="relative py-16 sm:py-24">
+        <div class="absolute -top-40 left-1/3 w-[400px] h-[400px] rounded-full opacity-30 pointer-events-none" style="background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%); filter: blur(80px);"></div>
+
+        <div class="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 text-center">
+          <span class="pill mb-6 inline-flex">FAQ</span>
+          <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight mb-5">
+            Frequently Asked <span class="gradient-text">Questions</span>
+          </h1>
+          <p class="text-lg text-nl-text-secondary max-w-2xl mx-auto leading-relaxed">
+            Common questions about the Never-Leak Protocol, its architecture, conformance tiers, and adoption.
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ Accordion -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6">
+        <div class="space-y-4">
+          {faqs.map((faq, index) => (
+            <div class="glass-card overflow-hidden faq-item">
+              <button
+                class="faq-toggle w-full text-left px-6 py-5 flex items-start gap-4 cursor-pointer group"
+                aria-expanded="false"
+              >
+                <span class="w-7 h-7 rounded-lg bg-nl-overlay flex items-center justify-center text-xs font-mono text-nl-cyan shrink-0 mt-0.5">
+                  {(index + 1).toString().padStart(2, '0')}
+                </span>
+                <span class="font-semibold text-nl-text text-sm sm:text-base leading-snug flex-1 group-hover:text-nl-cyan transition-colors">
+                  {faq.question}
+                </span>
+                <svg class="faq-chevron w-5 h-5 text-nl-text-tertiary shrink-0 mt-0.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="faq-answer hidden px-6 pb-5">
+                <div class="pl-11 text-sm text-nl-text-secondary leading-relaxed" set:html={faq.answer} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="mt-16 text-center">
+          <div class="glass-card p-8">
+            <h2 class="text-xl font-bold mb-3">Still have questions?</h2>
+            <p class="text-sm text-nl-text-secondary mb-6 leading-relaxed">
+              Open an issue on GitHub or check the full specification for detailed technical information.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="https://github.com/braincol/never-leak-protocol/issues" class="btn-primary">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                Open an Issue
+              </a>
+              <a href="/spec" class="btn-ghost">
+                Read Specification
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span>Created by <a href="https://braincol.com" class="text-nl-text-secondary hover:text-nl-text transition-colors">Braincol</a></span>
+      </div>
+    </footer>
+
+    <script>
+      document.querySelectorAll('.faq-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const item = btn.closest('.faq-item');
+          const answer = item.querySelector('.faq-answer');
+          const chevron = btn.querySelector('.faq-chevron');
+          const isOpen = !answer.classList.contains('hidden');
+
+          // Close all other items
+          document.querySelectorAll('.faq-item').forEach((otherItem) => {
+            if (otherItem !== item) {
+              otherItem.querySelector('.faq-answer').classList.add('hidden');
+              otherItem.querySelector('.faq-chevron').classList.remove('rotate-180');
+              otherItem.querySelector('.faq-toggle').setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          // Toggle current item
+          answer.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+      });
+    </script>
+  </body>
+</html>
