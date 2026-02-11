@@ -1,0 +1,807 @@
+---
+// ProtocolFlowAnimation.astro
+// Animated visualization of the NL Protocol multi-agent governance flow.
+// Pure SVG + CSS animations, triggered by Intersection Observer. Zero dependencies.
+---
+
+<section id="protocol-flow" class="relative py-6 sm:py-8 overflow-hidden">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <span class="pill mb-4 inline-flex">How It Works</span>
+      <h2 class="text-2xl sm:text-3xl font-bold mb-3">
+        Multi-agent governance <span class="gradient-text">in action</span>
+      </h2>
+      <p class="text-nl-text-secondary max-w-2xl mx-auto text-sm sm:text-base">
+        Watch how the NL Protocol protects secrets across multi-agent pipelines.
+        Agents delegate, execute, and audit — without ever seeing a secret value.
+      </p>
+    </div>
+
+    <!-- Animation Container -->
+    <div class="glass-card shimmer-border p-2 sm:p-4 relative" id="flow-container">
+
+      <!-- Replay button -->
+      <button
+        id="flow-replay"
+        class="absolute top-3 right-3 sm:top-5 sm:right-5 z-20 text-xs font-mono
+               text-nl-text-tertiary hover:text-nl-cyan transition-colors
+               flex items-center gap-1.5 flow-replay-btn"
+        aria-label="Replay animation"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Replay
+      </button>
+
+      <!-- ============================
+           Main SVG Animation
+           ============================ -->
+      <svg
+        viewBox="0 0 1120 520"
+        class="w-full h-auto flow-svg"
+        id="flow-svg"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label="Animated diagram showing the NL Protocol multi-agent governance flow"
+      >
+        <!-- ===== Definitions ===== -->
+        <defs>
+          <!-- Glow filters -->
+          <filter id="f-glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="b"/>
+            <feFlood flood-color="#00D4FF" flood-opacity="0.35"/>
+            <feComposite in2="b" operator="in" result="g"/>
+            <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="f-glow-violet" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="b"/>
+            <feFlood flood-color="#8B5CF6" flood-opacity="0.3"/>
+            <feComposite in2="b" operator="in" result="g"/>
+            <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="f-glow-green" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="b"/>
+            <feFlood flood-color="#22C55E" flood-opacity="0.3"/>
+            <feComposite in2="b" operator="in" result="g"/>
+            <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="f-glow-amber" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
+            <feFlood flood-color="#FBBF24" flood-opacity="0.3"/>
+            <feComposite in2="b" operator="in" result="g"/>
+            <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="f-shadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+          </filter>
+          <!-- Big ambient glow for NL Protocol center -->
+          <filter id="f-ambient" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="30" result="b"/>
+            <feFlood flood-color="#8B5CF6" flood-opacity="0.08"/>
+            <feComposite in2="b" operator="in"/>
+          </filter>
+
+          <!-- Arrow markers -->
+          <marker id="mk-cyan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L7,3 L0,5.5" fill="none" stroke="#00D4FF" stroke-width="1.2"/>
+          </marker>
+          <marker id="mk-violet" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L7,3 L0,5.5" fill="none" stroke="#8B5CF6" stroke-width="1.2"/>
+          </marker>
+          <marker id="mk-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L7,3 L0,5.5" fill="none" stroke="#22C55E" stroke-width="1.2"/>
+          </marker>
+          <marker id="mk-amber" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <path d="M0,0.5 L7,3 L0,5.5" fill="none" stroke="#FBBF24" stroke-width="1.2"/>
+          </marker>
+
+          <!-- Isolation zone pattern -->
+          <pattern id="iso-dots" width="16" height="16" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="0.6" fill="rgba(34,197,94,0.12)"/>
+          </pattern>
+        </defs>
+
+        <!-- Scale group: 90% uniform scale to fit viewport better -->
+        <g transform="translate(56, 5) scale(0.9)">
+
+        <!-- =========================================================
+             Background ambient glow (always visible once animated)
+             ========================================================= -->
+        <g class="fp fp-4">
+          <ellipse cx="420" cy="260" rx="140" ry="160" filter="url(#f-ambient)" class="nl-breathe"/>
+        </g>
+
+        <!-- =========================================================
+             PHASE 1 — Agents appear
+             ========================================================= -->
+        <g class="fp fp-1">
+          <!-- Agent A -->
+          <g transform="translate(80,145)">
+            <rect x="-55" y="-42" width="110" height="84" rx="14"
+                  fill="rgba(15,22,41,0.85)" stroke="#00D4FF" stroke-width="1.5"
+                  filter="url(#f-shadow)"/>
+            <!-- Robot icon -->
+            <rect x="-16" y="-25" width="32" height="22" rx="5"
+                  fill="none" stroke="#00D4FF" stroke-width="1.4"/>
+            <circle cx="-6" cy="-15" r="2.5" fill="#00D4FF"/>
+            <circle cx="6" cy="-15" r="2.5" fill="#00D4FF"/>
+            <rect x="-4" y="-8" width="8" height="2" rx="1" fill="#00D4FF" opacity="0.5"/>
+            <line x1="0" y1="-25" x2="0" y2="-32" stroke="#00D4FF" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="0" cy="-34" r="2" fill="#00D4FF"/>
+            <text y="18" text-anchor="middle" fill="#00D4FF" font-size="12" font-weight="600"
+                  font-family="'JetBrains Mono',monospace">Agent A</text>
+            <text y="32" text-anchor="middle" fill="#4A5568" font-size="8"
+                  font-family="'JetBrains Mono',monospace">orchestrator</text>
+          </g>
+
+          <!-- Agent B -->
+          <g transform="translate(80,370)">
+            <rect x="-55" y="-42" width="110" height="84" rx="14"
+                  fill="rgba(15,22,41,0.85)" stroke="#00D4FF" stroke-width="1.5"
+                  filter="url(#f-shadow)"/>
+            <rect x="-16" y="-25" width="32" height="22" rx="5"
+                  fill="none" stroke="#00D4FF" stroke-width="1.4"/>
+            <circle cx="-6" cy="-15" r="2.5" fill="#00D4FF"/>
+            <circle cx="6" cy="-15" r="2.5" fill="#00D4FF"/>
+            <rect x="-4" y="-8" width="8" height="2" rx="1" fill="#00D4FF" opacity="0.5"/>
+            <line x1="0" y1="-25" x2="0" y2="-32" stroke="#00D4FF" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="0" cy="-34" r="2" fill="#00D4FF"/>
+            <text y="18" text-anchor="middle" fill="#00D4FF" font-size="12" font-weight="600"
+                  font-family="'JetBrains Mono',monospace">Agent B</text>
+            <text y="32" text-anchor="middle" fill="#4A5568" font-size="8"
+                  font-family="'JetBrains Mono',monospace">delegated worker</text>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             PHASE 2 — Delegation (A → B) with step badge
+             ========================================================= -->
+        <g class="fp fp-2">
+          <line class="flow-line"
+                x1="80" y1="192" x2="80" y2="323"
+                stroke="#FBBF24" stroke-width="1.5" stroke-dasharray="8 6"
+                marker-end="url(#mk-amber)"/>
+          <!-- Delegation token badge -->
+          <g transform="translate(92,257)">
+            <rect x="0" y="-11" width="100" height="22" rx="11"
+                  fill="rgba(251,191,36,0.08)" stroke="#FBBF24" stroke-width="0.8"/>
+            <text x="50" y="4" text-anchor="middle" fill="#FBBF24" font-size="8.5"
+                  font-family="'JetBrains Mono',monospace">delegation token</text>
+          </g>
+          <!-- Step 1 badge -->
+          <g transform="translate(48,220)">
+            <circle r="11" fill="rgba(251,191,36,0.12)" stroke="#FBBF24" stroke-width="1"/>
+            <text text-anchor="middle" y="4" fill="#FBBF24" font-size="9" font-weight="700"
+                  font-family="'JetBrains Mono',monospace">1</text>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             PHASE 3 — Requests with opaque handles
+             ========================================================= -->
+        <g class="fp fp-3">
+          <!-- Agent A request line -->
+          <path class="flow-line fl-draw"
+                d="M140,140 C210,140 240,195 310,205"
+                fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="8 6"
+                marker-end="url(#mk-cyan)"/>
+          <!-- Opaque handle label A -->
+          <g transform="translate(208,155)">
+            <rect x="-42" y="-10" width="84" height="20" rx="10"
+                  fill="rgba(0,212,255,0.08)" stroke="#00D4FF" stroke-width="0.8"/>
+            <text text-anchor="middle" y="4" fill="#00D4FF" font-size="9" font-weight="500"
+                  font-family="'JetBrains Mono',monospace">{'{{nl:api-key}}'}</text>
+          </g>
+
+          <!-- Agent B request line -->
+          <path class="flow-line fl-draw"
+                d="M140,370 C210,370 240,295 310,280"
+                fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="8 6"
+                marker-end="url(#mk-cyan)"/>
+          <!-- Opaque handle label B -->
+          <g transform="translate(208,340)">
+            <rect x="-45" y="-10" width="90" height="20" rx="10"
+                  fill="rgba(0,212,255,0.08)" stroke="#00D4FF" stroke-width="0.8"/>
+            <text text-anchor="middle" y="4" fill="#00D4FF" font-size="9" font-weight="500"
+                  font-family="'JetBrains Mono',monospace">{'{{nl:db-pass}}'}</text>
+          </g>
+
+          <!-- Step 2 badge -->
+          <g transform="translate(260,248)">
+            <circle r="11" fill="rgba(0,212,255,0.12)" stroke="#00D4FF" stroke-width="1"/>
+            <text text-anchor="middle" y="4" fill="#00D4FF" font-size="9" font-weight="700"
+                  font-family="'JetBrains Mono',monospace">2</text>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             PHASE 4 — NL Protocol Boundary
+             ========================================================= -->
+        <g class="fp fp-4">
+          <!-- Outer boundary with breathing glow -->
+          <rect x="318" y="120" width="185" height="265" rx="18"
+                fill="rgba(139,92,246,0.06)" stroke="#8B5CF6" stroke-width="2"
+                filter="url(#f-glow-violet)" class="nl-breathe"/>
+
+          <!-- Shield pulse rings (expanding radar effect) -->
+          <circle cx="410" cy="155" r="22" fill="none" stroke="#8B5CF6" stroke-width="1.5" class="shield-ring shield-ring-1"/>
+          <circle cx="410" cy="155" r="22" fill="none" stroke="#8B5CF6" stroke-width="1" class="shield-ring shield-ring-2"/>
+
+          <!-- Shield icon -->
+          <g transform="translate(410,155)">
+            <path d="M0,-18 L14,-10 L14,5 C14,14 0,22 0,22 C0,22 -14,14 -14,5 L-14,-10 Z"
+                  fill="rgba(139,92,246,0.15)" stroke="#8B5CF6" stroke-width="1.8"/>
+            <path d="M-4,1 L-1,5 L5,-3" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <text x="410" y="194" text-anchor="middle" fill="#8B5CF6" font-size="14" font-weight="700"
+                font-family="'Inter',sans-serif">NL Protocol</text>
+          <text x="410" y="209" text-anchor="middle" fill="#4A5568" font-size="9"
+                font-family="'JetBrains Mono',monospace">Boundary</text>
+
+          <!-- Step 3 badge -->
+          <g transform="translate(410,98)">
+            <circle r="11" fill="rgba(139,92,246,0.15)" stroke="#8B5CF6" stroke-width="1"/>
+            <text text-anchor="middle" y="4" fill="#8B5CF6" font-size="9" font-weight="700"
+                  font-family="'JetBrains Mono',monospace">3</text>
+          </g>
+
+          <!-- Security checks -->
+          <g class="fp fp-4a">
+            <g transform="translate(340,228)">
+              <rect width="140" height="28" rx="8"
+                    fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.8"/>
+              <circle class="check-dot" cx="16" cy="14" r="6" fill="#22C55E"/>
+              <path class="check-mark" d="M13,14 L15,16.5 L19,11.5" fill="none" stroke="#0A0E1A"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="30" y="18" fill="#C4B5FD" font-size="10"
+                    font-family="'JetBrains Mono',monospace">Identity</text>
+            </g>
+          </g>
+          <g class="fp fp-4b">
+            <g transform="translate(340,264)">
+              <rect width="140" height="28" rx="8"
+                    fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.8"/>
+              <circle class="check-dot" cx="16" cy="14" r="6" fill="#22C55E"/>
+              <path class="check-mark" d="M13,14 L15,16.5 L19,11.5" fill="none" stroke="#0A0E1A"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="30" y="18" fill="#C4B5FD" font-size="10"
+                    font-family="'JetBrains Mono',monospace">Scope Grant</text>
+            </g>
+          </g>
+          <g class="fp fp-4c">
+            <g transform="translate(340,300)">
+              <rect width="140" height="28" rx="8"
+                    fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.8"/>
+              <circle class="check-dot" cx="16" cy="14" r="6" fill="#22C55E"/>
+              <path class="check-mark" d="M13,14 L15,16.5 L19,11.5" fill="none" stroke="#0A0E1A"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="30" y="18" fill="#C4B5FD" font-size="10"
+                    font-family="'JetBrains Mono',monospace">Pre-Defense</text>
+            </g>
+          </g>
+          <g class="fp fp-4d">
+            <g transform="translate(340,336)">
+              <rect width="140" height="28" rx="8"
+                    fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.8"/>
+              <circle class="check-dot" cx="16" cy="14" r="6" fill="#22C55E"/>
+              <path class="check-mark" d="M13,14 L15,16.5 L19,11.5" fill="none" stroke="#0A0E1A"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="30" y="18" fill="#C4B5FD" font-size="10"
+                    font-family="'JetBrains Mono',monospace">Audit Record</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             PHASE 5 — Isolation Zone + Vault
+             ========================================================= -->
+        <g class="fp fp-5">
+          <!-- Isolation zone -->
+          <g>
+            <rect x="555" y="110" width="230" height="175" rx="16"
+                  fill="url(#iso-dots)" stroke="#22C55E" stroke-width="2"
+                  stroke-dasharray="8 4" filter="url(#f-glow-green)"/>
+            <text x="670" y="142" text-anchor="middle" fill="#22C55E" font-size="13" font-weight="700"
+                  font-family="'Inter',sans-serif">Isolation Boundary</text>
+            <text x="670" y="158" text-anchor="middle" fill="#4A5568" font-size="8.5"
+                  font-family="'JetBrains Mono',monospace">subprocess - no context leaks</text>
+
+            <!-- Inside: resolution visualization -->
+            <g transform="translate(590,185)">
+              <text fill="#00D4FF" font-size="9.5" font-family="'JetBrains Mono',monospace" opacity="0.8">{'{{nl:api-key}}'}</text>
+              <text x="82" fill="#4A5568" font-size="13" font-family="'JetBrains Mono',monospace">&#x2192;</text>
+              <text x="100" fill="#22C55E" font-size="9.5" font-family="'JetBrains Mono',monospace">sk-****</text>
+            </g>
+            <g transform="translate(590,208)">
+              <text fill="#00D4FF" font-size="9.5" font-family="'JetBrains Mono',monospace" opacity="0.8">{'{{nl:db-pass}}'}</text>
+              <text x="82" fill="#4A5568" font-size="13" font-family="'JetBrains Mono',monospace">&#x2192;</text>
+              <text x="100" fill="#22C55E" font-size="9.5" font-family="'JetBrains Mono',monospace">p@$$***</text>
+            </g>
+            <g transform="translate(590,230)">
+              <rect width="170" height="1" fill="rgba(34,197,94,0.2)"/>
+            </g>
+            <!-- Execution indicator -->
+            <g transform="translate(590,250)">
+              <rect x="-4" y="-10" width="170" height="20" rx="6" fill="rgba(34,197,94,0.06)"/>
+              <text x="4" fill="#22C55E" font-size="9.5" font-family="'JetBrains Mono',monospace" font-weight="600">&#x26A1; executed in sandbox</text>
+            </g>
+          </g>
+
+          <!-- Step 4 badge -->
+          <g transform="translate(670,85)">
+            <circle r="11" fill="rgba(34,197,94,0.12)" stroke="#22C55E" stroke-width="1"/>
+            <text text-anchor="middle" y="4" fill="#22C55E" font-size="9" font-weight="700"
+                  font-family="'JetBrains Mono',monospace">4</text>
+          </g>
+
+          <!-- Vault -->
+          <g transform="translate(670,380)">
+            <rect x="-60" y="-35" width="120" height="70" rx="14"
+                  fill="rgba(15,22,41,0.85)" stroke="#FBBF24" stroke-width="1.5"
+                  filter="url(#f-shadow)"/>
+            <!-- Lock icon -->
+            <rect x="-10" y="-12" width="20" height="16" rx="3"
+                  fill="rgba(251,191,36,0.15)" stroke="#FBBF24" stroke-width="1.3"/>
+            <path d="M-5,-12 L-5,-19 A5,5 0 0 1 5,-19 L5,-12"
+                  fill="none" stroke="#FBBF24" stroke-width="1.8"/>
+            <circle cx="0" cy="-2" r="2" fill="#FBBF24"/>
+            <rect x="-0.8" y="-2" width="1.6" height="5" fill="#FBBF24"/>
+            <text y="26" text-anchor="middle" fill="#FBBF24" font-size="11" font-weight="600"
+                  font-family="'JetBrains Mono',monospace">Vault</text>
+          </g>
+
+          <!-- Protocol → Isolation line -->
+          <path class="flow-line fl-draw"
+                d="M508,240 L550,195"
+                fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="8 6"
+                marker-end="url(#mk-violet)"/>
+
+          <!-- Vault → Isolation line -->
+          <line class="flow-line fl-draw"
+                x1="670" y1="340" x2="670" y2="290"
+                stroke="#FBBF24" stroke-width="1.5" stroke-dasharray="8 6"
+                marker-end="url(#mk-amber)"/>
+          <g transform="translate(683,315)">
+            <text fill="#FBBF24" font-size="8" font-family="'JetBrains Mono',monospace" opacity="0.7">resolve</text>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             PHASE 6 — Clean Result
+             ========================================================= -->
+        <g class="fp fp-6">
+          <!-- Result card -->
+          <g transform="translate(930,200)">
+            <rect x="-80" y="-65" width="160" height="140" rx="16"
+                  fill="rgba(15,22,41,0.85)" stroke="#22C55E" stroke-width="1.5"
+                  filter="url(#f-glow-green)"/>
+            <!-- Big checkmark -->
+            <g transform="translate(0,-30)">
+              <circle r="18" fill="rgba(34,197,94,0.12)" stroke="#22C55E" stroke-width="1.8"/>
+              <path d="M-7,0 L-2,6 L8,-6" fill="none" stroke="#22C55E"
+                    stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <text y="8" text-anchor="middle" fill="#22C55E" font-size="12" font-weight="700"
+                  font-family="'Inter',sans-serif">Clean Result</text>
+            <!-- Result snippet -->
+            <text x="-60" y="28" fill="#8892A8" font-size="8.5"
+                  font-family="'JetBrains Mono',monospace">{'{"status":"success"}'}</text>
+            <text x="-60" y="42" fill="#8892A8" font-size="8.5"
+                  font-family="'JetBrains Mono',monospace">{'{"stdout":"(1 row)"}'}</text>
+            <!-- Secret never exposed — highlighted -->
+            <g transform="translate(0,62)">
+              <rect x="-70" y="-11" width="140" height="18" rx="9" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.2)" stroke-width="0.6"/>
+              <text text-anchor="middle" y="3" fill="#EF4444" font-size="8.5" font-weight="600"
+                    font-family="'JetBrains Mono',monospace">&#x2715; secret: NEVER exposed</text>
+            </g>
+          </g>
+
+          <!-- Step 5 badge -->
+          <g transform="translate(930,110)">
+            <circle r="11" fill="rgba(34,197,94,0.12)" stroke="#22C55E" stroke-width="1"/>
+            <text text-anchor="middle" y="4" fill="#22C55E" font-size="9" font-weight="700"
+                  font-family="'JetBrains Mono',monospace">5</text>
+          </g>
+
+          <!-- Isolation → Result line -->
+          <path class="flow-line fl-draw"
+                d="M790,200 L845,200"
+                fill="none" stroke="#22C55E" stroke-width="1.5" stroke-dasharray="8 6"
+                marker-end="url(#mk-green)"/>
+        </g>
+
+        <!-- =========================================================
+             PHASE 7 — Audit Chain
+             ========================================================= -->
+        <g class="fp fp-7">
+          <!-- Audit container -->
+          <g transform="translate(310,540)">
+            <rect x="0" y="-20" width="440" height="40" rx="12"
+                  fill="rgba(15,22,41,0.7)" stroke="rgba(136,146,168,0.25)" stroke-width="1"/>
+
+            <!-- Chain icon -->
+            <g transform="translate(16,0)">
+              <ellipse rx="8" ry="5.5" fill="none" stroke="#8892A8" stroke-width="1.2"/>
+              <ellipse cx="12" rx="8" ry="5.5" fill="none" stroke="#8892A8" stroke-width="1.2"/>
+            </g>
+
+            <text x="42" y="5" fill="#8892A8" font-size="10" font-weight="600"
+                  font-family="'JetBrains Mono',monospace">Audit</text>
+
+            <!-- Hash chain blocks -->
+            <g class="audit-chain">
+              <g transform="translate(95,0)">
+                <rect x="-2" y="-10" width="68" height="20" rx="4"
+                      fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.6"/>
+                <text x="32" y="4" text-anchor="middle" fill="#C4B5FD" font-size="7.5"
+                      font-family="'JetBrains Mono',monospace">sha256:a1b2</text>
+              </g>
+              <text x="168" y="4" fill="#4A5568" font-size="10">&#x2192;</text>
+              <g transform="translate(185,0)">
+                <rect x="-2" y="-10" width="68" height="20" rx="4"
+                      fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.6"/>
+                <text x="32" y="4" text-anchor="middle" fill="#C4B5FD" font-size="7.5"
+                      font-family="'JetBrains Mono',monospace">sha256:c3d4</text>
+              </g>
+              <text x="258" y="4" fill="#4A5568" font-size="10">&#x2192;</text>
+              <g transform="translate(275,0)">
+                <rect x="-2" y="-10" width="68" height="20" rx="4"
+                      fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.25)" stroke-width="0.6"/>
+                <text x="32" y="4" text-anchor="middle" fill="#C4B5FD" font-size="7.5"
+                      font-family="'JetBrains Mono',monospace">sha256:e5f6</text>
+              </g>
+              <text x="348" y="4" fill="#4A5568" font-size="10">&#x2192;</text>
+              <g transform="translate(365,0)">
+                <rect x="-2" y="-10" width="60" height="20" rx="4"
+                      fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.35)" stroke-width="0.8"/>
+                <text x="30" y="4" text-anchor="middle" fill="#22C55E" font-size="7.5" font-weight="600"
+                      font-family="'JetBrains Mono',monospace">latest</text>
+              </g>
+            </g>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             PHASE 8 — Return lines (result → agents) — more visible
+             ========================================================= -->
+        <g class="fp fp-8">
+          <!-- Result → Agent A (curved return — wide arc above everything) -->
+          <path class="flow-line fl-draw fl-return"
+                d="M860,148 C870,20 140,20 85,100"
+                fill="none" stroke="#22C55E" stroke-width="1.8" stroke-dasharray="8 6"
+                opacity="0.6" marker-end="url(#mk-green)"/>
+          <g transform="translate(470,28)">
+            <rect x="-35" y="-11" width="70" height="22" rx="11"
+                  fill="rgba(34,197,94,0.08)" stroke="#22C55E" stroke-width="0.8"/>
+            <text text-anchor="middle" y="4" fill="#22C55E" font-size="9" font-weight="500"
+                  font-family="'JetBrains Mono',monospace">result &#x2713;</text>
+          </g>
+
+          <!-- Result → Agent B (curved return — wide arc below Vault) -->
+          <path class="flow-line fl-draw fl-return"
+                d="M860,268 C880,565 80,565 85,415"
+                fill="none" stroke="#22C55E" stroke-width="1.8" stroke-dasharray="8 6"
+                opacity="0.6" marker-end="url(#mk-green)"/>
+          <g transform="translate(490,498)">
+            <rect x="-35" y="-11" width="70" height="22" rx="11"
+                  fill="rgba(34,197,94,0.08)" stroke="#22C55E" stroke-width="0.8"/>
+            <text text-anchor="middle" y="4" fill="#22C55E" font-size="9" font-weight="500"
+                  font-family="'JetBrains Mono',monospace">result &#x2713;</text>
+          </g>
+        </g>
+
+        <!-- =========================================================
+             Animated data pulses (circles animated via JS)
+             ========================================================= -->
+        <circle id="pulse-a" r="4" fill="#00D4FF" filter="url(#f-glow-cyan)" opacity="0"/>
+        <circle id="pulse-b" r="4" fill="#00D4FF" filter="url(#f-glow-cyan)" opacity="0"/>
+        <circle id="pulse-c" r="3.5" fill="#8B5CF6" filter="url(#f-glow-violet)" opacity="0"/>
+        <circle id="pulse-d" r="3.5" fill="#22C55E" filter="url(#f-glow-green)" opacity="0"/>
+        <!-- Continuous loop pulses (activated after initial animation) -->
+        <circle id="loop-1" r="4" fill="#00D4FF" filter="url(#f-glow-cyan)" opacity="0"/>
+        <circle id="loop-2" r="4" fill="#8B5CF6" filter="url(#f-glow-violet)" opacity="0"/>
+        <circle id="loop-3" r="4" fill="#22C55E" filter="url(#f-glow-green)" opacity="0"/>
+
+        </g><!-- end scale group -->
+      </svg>
+    </div>
+
+    <!-- ============================
+         Summary callouts
+         ============================ -->
+    <div class="grid sm:grid-cols-3 gap-5 mt-6" id="flow-callouts">
+      <div class="flow-callout text-center sm:text-left">
+        <div class="flex items-center justify-center sm:justify-start gap-2 mb-2">
+          <span class="w-7 h-7 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-xs font-bold">0</span>
+          <span class="font-semibold text-nl-text text-sm">Zero-Knowledge</span>
+        </div>
+        <p class="text-xs text-nl-text-secondary leading-relaxed">
+          Agents use opaque handles <code class="text-nl-cyan font-mono">{'{{nl:...}}'}</code>, never see secret values. Prompt injection can't exfiltrate what isn't there.
+        </p>
+      </div>
+      <div class="flow-callout text-center sm:text-left">
+        <div class="flex items-center justify-center sm:justify-start gap-2 mb-2">
+          <span class="w-7 h-7 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-xs font-bold font-mono">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </span>
+          <span class="font-semibold text-nl-text text-sm">Isolated Execution</span>
+        </div>
+        <p class="text-xs text-nl-text-secondary leading-relaxed">
+          Secrets resolved inside sandboxed subprocesses. Memory wiped on exit. No shell expansion, no core dumps.
+        </p>
+      </div>
+      <div class="flow-callout text-center sm:text-left">
+        <div class="flex items-center justify-center sm:justify-start gap-2 mb-2">
+          <span class="w-7 h-7 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-xs font-bold font-mono">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </span>
+          <span class="font-semibold text-nl-text text-sm">Immutable Audit</span>
+        </div>
+        <p class="text-xs text-nl-text-secondary leading-relaxed">
+          Every action hash-chained with SHA-256. HMAC-signed, tamper-evident. Cryptographically verifiable by anyone.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     Styles
+     ============================ -->
+<style is:global>
+  /* ---- Phase reveal system ---- */
+  .fp {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1),
+                transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  #flow-container.is-animating .fp-1  { opacity: 1; transform: none; transition-delay: 0s;    }
+  #flow-container.is-animating .fp-2  { opacity: 1; transform: none; transition-delay: 0.7s;  }
+  #flow-container.is-animating .fp-3  { opacity: 1; transform: none; transition-delay: 1.4s;  }
+  #flow-container.is-animating .fp-4  { opacity: 1; transform: none; transition-delay: 2.2s;  }
+  #flow-container.is-animating .fp-4a { opacity: 1; transform: none; transition-delay: 2.8s;  }
+  #flow-container.is-animating .fp-4b { opacity: 1; transform: none; transition-delay: 3.1s;  }
+  #flow-container.is-animating .fp-4c { opacity: 1; transform: none; transition-delay: 3.4s;  }
+  #flow-container.is-animating .fp-4d { opacity: 1; transform: none; transition-delay: 3.7s;  }
+  #flow-container.is-animating .fp-5  { opacity: 1; transform: none; transition-delay: 4.2s;  }
+  #flow-container.is-animating .fp-6  { opacity: 1; transform: none; transition-delay: 5.2s;  }
+  #flow-container.is-animating .fp-7  { opacity: 1; transform: none; transition-delay: 6.2s;  }
+  #flow-container.is-animating .fp-8  { opacity: 1; transform: none; transition-delay: 7.0s;  }
+
+  /* ---- Lines are always dashed — revealed by parent .fp opacity ---- */
+  .fl-draw {
+    stroke-dasharray: 8 6;
+  }
+
+  /* ---- Check dots (in security checks) ---- */
+  .check-dot {
+    transform: scale(0);
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .check-mark { opacity: 0; }
+
+  #flow-container.is-animating .fp-4a .check-dot  { animation: nl-popIn 0.3s ease 2.8s forwards; }
+  #flow-container.is-animating .fp-4a .check-mark  { animation: nl-fadeIn 0.2s ease 2.95s forwards; }
+  #flow-container.is-animating .fp-4b .check-dot  { animation: nl-popIn 0.3s ease 3.1s forwards; }
+  #flow-container.is-animating .fp-4b .check-mark  { animation: nl-fadeIn 0.2s ease 3.25s forwards; }
+  #flow-container.is-animating .fp-4c .check-dot  { animation: nl-popIn 0.3s ease 3.4s forwards; }
+  #flow-container.is-animating .fp-4c .check-mark  { animation: nl-fadeIn 0.2s ease 3.55s forwards; }
+  #flow-container.is-animating .fp-4d .check-dot  { animation: nl-popIn 0.3s ease 3.7s forwards; }
+  #flow-container.is-animating .fp-4d .check-mark  { animation: nl-fadeIn 0.2s ease 3.85s forwards; }
+
+  @keyframes nl-popIn {
+    0%   { transform: scale(0); }
+    70%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  @keyframes nl-fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* ---- NL Protocol breathing glow ---- */
+  @keyframes nl-breathe {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.7; }
+  }
+  #flow-container.is-animating .nl-breathe {
+    animation: nl-breathe 4s ease-in-out 8s infinite;
+  }
+
+  /* ---- Replay button ---- */
+  .flow-replay-btn {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  #flow-container.is-animating .flow-replay-btn {
+    opacity: 1;
+    transition-delay: 7.5s;
+  }
+
+  /* ---- Callouts below ---- */
+  .flow-callout {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  #flow-container.is-animating ~ #flow-callouts .flow-callout:nth-child(1) {
+    opacity: 1; transform: none; transition-delay: 5.5s;
+  }
+  #flow-container.is-animating ~ #flow-callouts .flow-callout:nth-child(2) {
+    opacity: 1; transform: none; transition-delay: 6.0s;
+  }
+  #flow-container.is-animating ~ #flow-callouts .flow-callout:nth-child(3) {
+    opacity: 1; transform: none; transition-delay: 6.5s;
+  }
+
+  /* ---- Flowing dashes (continuous after reveal) ---- */
+  @keyframes nl-flow {
+    to { stroke-dashoffset: -14; }
+  }
+
+  #flow-container.flow-active .fl-draw,
+  #flow-container.flow-active .fp-2 .flow-line {
+    animation: nl-flow 0.7s linear infinite;
+  }
+
+  /* ---- Shield pulse rings ---- */
+  @keyframes nl-ring {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  .shield-ring {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+  }
+
+  #flow-container.flow-active .shield-ring-1 {
+    animation: nl-ring 3s ease-out infinite;
+  }
+
+  #flow-container.flow-active .shield-ring-2 {
+    animation: nl-ring 3s ease-out 1.5s infinite;
+  }
+
+  /* ---- Container shimmer always on after reveal ---- */
+  #flow-container.flow-active::after {
+    opacity: 0.5;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 639px) {
+    .flow-svg {
+      min-height: 280px;
+    }
+  }
+</style>
+
+<!-- ============================
+     Animation Controller
+     ============================ -->
+<script>
+  function initFlowAnimation() {
+    const container = document.getElementById('flow-container');
+    const replayBtn = document.getElementById('flow-replay');
+    if (!container) return;
+
+    // Pulse dot animation configs (Web Animations API)
+    const pulseConfigs = [
+      { id: 'pulse-a', delay: 1600, dur: 1200, from: [140,140], to: [310,205] },
+      { id: 'pulse-b', delay: 1800, dur: 1200, from: [140,370], to: [310,280] },
+      { id: 'pulse-c', delay: 4400, dur: 800,  from: [508,240], to: [550,195] },
+      { id: 'pulse-d', delay: 5400, dur: 800,  from: [790,200], to: [845,200] },
+    ];
+
+    // Continuous loop config (runs after initial animation)
+    const loopConfigs = [
+      { id: 'loop-1', dur: 2000, from: [140,140], to: [400,205] },
+      { id: 'loop-2', dur: 2000, from: [140,370], to: [400,280] },
+      { id: 'loop-3', dur: 1400, from: [510,240], to: [670,195] },
+    ];
+
+    let pulseTimeouts = [];
+    let loopInterval = null;
+
+    function animateDot(id, from, to, dur) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute('cx', String(from[0]));
+      el.setAttribute('cy', String(from[1]));
+      el.animate([
+        { opacity: 0 },
+        { opacity: 0.8, offset: 0.1 },
+        { opacity: 0.8, offset: 0.85 },
+        { opacity: 0 }
+      ], { duration: dur, fill: 'forwards' });
+      el.animate([
+        { transform: 'translate(0, 0)' },
+        { transform: `translate(${to[0]-from[0]}px, ${to[1]-from[1]}px)` }
+      ], { duration: dur, fill: 'forwards', easing: 'ease-in-out' });
+    }
+
+    function animatePulses() {
+      pulseTimeouts.forEach(t => clearTimeout(t));
+      pulseTimeouts = [];
+      if (loopInterval) { clearInterval(loopInterval); loopInterval = null; }
+
+      // Reset all dots
+      [...document.querySelectorAll('#flow-svg circle[id^="pulse-"], #flow-svg circle[id^="loop-"]')]
+        .forEach(el => { el.style.opacity = '0'; });
+
+      // Initial pulses
+      pulseConfigs.forEach(cfg => {
+        const tid = setTimeout(() => animateDot(cfg.id, cfg.from, cfg.to, cfg.dur), cfg.delay);
+        pulseTimeouts.push(tid);
+      });
+
+      // Start continuous loop after initial animation completes
+      const loopTid = setTimeout(() => {
+        function runLoop() {
+          loopConfigs.forEach((cfg, i) => {
+            setTimeout(() => animateDot(cfg.id, cfg.from, cfg.to, cfg.dur), i * 800);
+          });
+        }
+        runLoop();
+        loopInterval = setInterval(runLoop, 4000);
+      }, 9000);
+      pulseTimeouts.push(loopTid);
+    }
+
+    let flowActiveTimeout = null;
+
+    function startAnimation() {
+      container.classList.remove('is-animating');
+      container.classList.remove('flow-active');
+      if (flowActiveTimeout) clearTimeout(flowActiveTimeout);
+      void container.offsetWidth;
+      container.classList.add('is-animating');
+      animatePulses();
+      // After initial reveal completes, switch to continuous flowing mode
+      flowActiveTimeout = setTimeout(() => {
+        container.classList.add('flow-active');
+      }, 8500);
+    }
+
+    // Intersection Observer — trigger when 25% visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startAnimation();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(container);
+
+    // Replay button
+    if (replayBtn) {
+      replayBtn.addEventListener('click', () => {
+        startAnimation();
+      });
+    }
+  }
+
+  // Run on DOM ready and on Astro page transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlowAnimation);
+  } else {
+    initFlowAnimation();
+  }
+  document.addEventListener('astro:page-load', initFlowAnimation);
+</script>

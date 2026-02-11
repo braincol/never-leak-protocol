@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140" fill="none">
+  <!-- Isometric Safe Body -->
+  <polygon points="25,50 70,27 70,95 25,118" fill="#1d4ed8"/>
+  <polygon points="70,27 115,50 115,118 70,95" fill="#1e40af"/>
+  <polygon points="25,50 70,27 115,50 70,73" fill="#3b82f6"/>
+  <!-- Dial -->
+  <circle cx="92" cy="82" r="14" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
+  <circle cx="92" cy="82" r="3" fill="#60a5fa"/>
+  <!-- 3 Lines -->
+  <line x1="33" y1="70" x2="62" y2="82" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+  <line x1="33" y1="82" x2="62" y2="94" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+  <line x1="33" y1="94" x2="62" y2="106" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+</svg>

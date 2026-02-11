@@ -1,0 +1,263 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Opaque Handles — NL Protocol</title>
+    <meta name="description" content="Learn how the Never-Leak Protocol uses opaque handles so AI agents can interact with secrets without ever seeing the secret values. The foundation of zero-knowledge agent security." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="learn" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 mb-8">
+        <a href="/learn" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors">
+          &larr; Back to Learn
+        </a>
+      </div>
+
+      <!-- Header -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="pill">Concept</span>
+          <span class="text-xs text-nl-text-tertiary font-mono">5 min read</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight">
+          Opaque Handles: How Agents Use Secrets <span class="text-nl-cyan">Without Seeing Them</span>
+        </h1>
+        <p class="text-nl-text-secondary leading-relaxed">
+          The most fundamental concept in the Never-Leak Protocol. Opaque handles decouple AI agents from the secret values they need, making it architecturally impossible for secrets to leak through the agent's context window.
+        </p>
+      </div>
+
+      <!-- Section 1: The Problem -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">The Problem</h2>
+        <div class="text-nl-text-secondary leading-relaxed space-y-4">
+          <p>
+            Today, AI agents that need to call APIs or access databases receive secret values directly in their context window. An orchestrator might inject an API key into the agent's system prompt, or the agent itself might read a secret from a file or environment variable.
+          </p>
+          <p>
+            This is fundamentally unsafe. Any data in an LLM's context can be memorized, leaked via prompt injection, or accidentally included in outputs. The model has no concept of "confidential" versus "public" data -- everything in the context window is equally accessible.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <div class="code-block p-4 sm:p-5">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-red-400"></span>
+              Unsafe: Secret in agent context
+            </div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment"># The agent sees the raw secret value</span>
+<span class="comment"># Any prompt injection can now exfiltrate it</span>
+
+agent.context = <span class="string">"Use API key: sk-1234567890abcdef to call the API"</span>
+
+<span class="comment"># The secret is now in the LLM's context window</span>
+<span class="comment"># It can be memorized, leaked, or extracted</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: The NL Protocol Solution -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">The NL Protocol Solution</h2>
+        <div class="text-nl-text-secondary leading-relaxed space-y-4">
+          <p>
+            Instead of secrets, agents work with <strong class="text-nl-text">opaque handles</strong>: references like <code class="text-nl-cyan font-mono text-sm">{'{{nl:api-key}}'}</code> that carry <em>no information</em> about the secret's value. The handle is just a name -- it tells you what the secret is for, but nothing about what it contains.
+          </p>
+          <p>
+            The agent includes these handles in <strong class="text-nl-text">action templates</strong> -- structured requests that describe what needs to be done. The NL System receives the template, resolves the handles inside an isolation boundary, executes the action, and returns <em>only the result</em> to the agent.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <div class="code-block p-4 sm:p-5">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-nl-green"></span>
+              Safe: Agent uses opaque handle
+            </div>
+            <pre class="text-xs sm:text-sm leading-relaxed">{`{
+  `}<span class="string">"type"</span>: <span class="string">"exec"</span>,
+  <span class="string">"template"</span>: <span class="string">"curl -H 'Authorization: Bearer <span class="placeholder">{'{{nl:api-key}}'}</span>' https://api.example.com"</span>,
+  <span class="string">"purpose"</span>: <span class="string">"Fetch user profile"</span>
+{`}`}</pre>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 mt-6">
+          <div class="flex items-start gap-3">
+            <span class="text-nl-green mt-0.5 shrink-0 text-lg">&#x2713;</span>
+            <p class="text-sm text-nl-text-secondary leading-relaxed">
+              The agent <strong class="text-nl-text">never</strong> sees <code class="text-nl-cyan font-mono text-xs">sk-1234567890abcdef</code>. It only sees the result of the curl command. The secret exists only inside the isolated execution boundary, for the duration of a single action.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: How It Works -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">How It Works</h2>
+        <p class="text-nl-text-secondary leading-relaxed mb-6">
+          The opaque handle resolution process involves six steps. At no point does the agent have access to the secret value.
+        </p>
+
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">1</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Agent constructs action template</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The agent builds a request containing <code class="text-nl-cyan font-mono text-xs">{'{{nl:secret-name}}'}</code> handles wherever secret values are needed. The template also includes a purpose string explaining why the action is necessary.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">2</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">NL System verifies identity and scope</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The system checks the agent's identity document and confirms it has a valid scope grant for each referenced secret. If any check fails, the request is rejected before any secret is accessed.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">3</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Secret is resolved from secure storage</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The handle <code class="text-nl-cyan font-mono text-xs">{'{{nl:api-key}}'}</code> is resolved to the actual secret value inside the system's secure memory. This value never leaves the isolation boundary.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">4</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Command is executed in isolation</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The template is populated with real values and executed in an isolated subprocess. The subprocess has no connection back to the agent -- it runs independently with a clean environment.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">5</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Output is scanned and sanitized</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Before returning results to the agent, the output is scanned for any occurrence of secret values. If a secret appears in stdout or stderr (for example, a verbose error message that echoes credentials), it is redacted.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 mt-0.5 font-mono">6</span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Clean result returned to agent</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Only the sanitized output (stdout, stderr, exit code) is returned. The agent can reason about the result, but has no path to the underlying secret values.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual flow -->
+        <div class="mt-8">
+          <div class="code-block p-4 sm:p-5">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Resolution Flow</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment">Agent                    NL System                  Secure Storage</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span>  <span class="string">action_request</span>           <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span>  <span class="placeholder">{'{{nl:api-key}}'}</span>          <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span> ----------------------&gt;  <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span>  <span class="string">resolve handle</span>          <span class="keyword">|</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span> ----------------------&gt;  <span class="keyword">|</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span>  <span class="function">sk-1234...</span>               <span class="keyword">|</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span> &lt;----------------------  <span class="keyword">|</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span>                     <span class="string">[execute in isolation]</span>       <span class="keyword">|</span>
+  <span class="keyword">|</span>                     <span class="string">[scan &amp; sanitize output]</span>    <span class="keyword">|</span>
+  <span class="keyword">|</span>                          <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span>  <span class="string">action_response</span>          <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span>  <span class="function">(clean result only)</span>      <span class="keyword">|</span>                          <span class="keyword">|</span>
+  <span class="keyword">|</span> &lt;----------------------  <span class="keyword">|</span>                          <span class="keyword">|</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Why This Matters -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 mb-16">
+        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-nl-text">Why This Matters</h2>
+
+        <div class="glass-card p-6 space-y-5">
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Prompt injection resistance</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Even if the agent is compromised through prompt injection, it cannot leak what it does not have. The attacker controls the agent's behavior, but the secret values are simply not available in the context.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Zero information leakage</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                The handle <code class="text-nl-cyan font-mono text-xs">{'{{nl:api-key}}'}</code> tells an attacker nothing. It is just a reference name. The attacker cannot derive, guess, or reconstruct the secret value from the handle alone.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-nl-text mb-1">Transparent secret rotation</div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Secret rotation is invisible to the agent. The handle <code class="text-nl-cyan font-mono text-xs">{'{{nl:api-key}}'}</code> stays the same; only the underlying value changes. No agent code needs to be updated, no prompts need to be rewritten.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mx-auto max-w-3xl px-4 sm:px-6">
+        <div class="border-t border-nl-border pt-8 flex items-center justify-between">
+          <a href="/learn" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors">
+            &larr; Back to Learn
+          </a>
+          <a href="/learn/scope-grants" class="text-sm text-nl-cyan hover:text-nl-cyan/80 transition-colors font-medium">
+            Next: Scope Grants &rarr;
+          </a>
+        </div>
+      </div>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span class="inline-flex items-center gap-2">Created by <a href="https://braincol.com" class="inline-flex items-center gap-1.5 text-nl-text-secondary hover:text-nl-text transition-colors"><img src="/braincol-logo.svg" alt="" class="h-4 w-4" />Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

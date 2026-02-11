@@ -1,0 +1,163 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NL Protocol for Developers — NL Protocol</title>
+    <meta name="description" content="A developer's guide to the Never-Leak Protocol. Learn how opaque handles replace direct secret access and how to build NL-compliant systems." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="home" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 pt-8">
+        <a href="/get-started" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          All paths
+        </a>
+      </div>
+
+      <!-- Hero -->
+      <section class="py-12 sm:py-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <span class="pill mb-6 inline-flex">Developer Guide</span>
+          <h1 class="text-3xl sm:text-5xl font-extrabold mb-5 tracking-tight">
+            NL Protocol for <span class="gradient-text">Developers</span>
+          </h1>
+          <p class="text-lg text-nl-text-secondary max-w-3xl leading-relaxed">
+            Everything you need to understand, implement, and test the Never-Leak Protocol in your systems.
+          </p>
+        </div>
+      </section>
+
+      <!-- You are -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8">
+            <div class="flex items-start gap-4">
+              <span class="w-10 h-10 rounded-xl bg-nl-cyan/10 text-nl-cyan flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              </span>
+              <div>
+                <h2 class="font-semibold text-nl-text text-lg mb-2">You are</h2>
+                <p class="text-nl-text-secondary leading-relaxed">
+                  A backend engineer, DevOps engineer, or security engineer building systems that need to handle secrets safely in AI agent contexts.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- What you'll learn -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">What you'll learn</h2>
+          <div class="glass-card p-6 sm:p-8">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary">How opaque handles replace direct secret access, keeping credentials out of the agent context window</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary">How to implement a Basic (L1-L3) conformant system with agent identity, action-based access, and execution isolation</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary">Wire protocol JSON schemas and transport bindings (HTTP, stdio, WebSocket)</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary">Testing your implementation for conformance against the NL Protocol specification</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recommended path -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Recommended path</h2>
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">1</span>
+              <div>
+                <a href="/learn/concepts" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Learn core concepts</a>
+                <p class="text-sm text-nl-text-secondary">Understand opaque handles, scope grants, isolation boundaries, and the agent identity model.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">2</span>
+              <div>
+                <a href="/implement/getting-started" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Read the getting started guide</a>
+                <p class="text-sm text-nl-text-secondary">Step-by-step walkthrough for building your first NL-compliant action handler.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">3</span>
+              <div>
+                <a href="/spec" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Explore the specification</a>
+                <p class="text-sm text-nl-text-secondary">The full protocol specification covering all 7 levels, wire formats, and security requirements.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-amber/10 text-nl-amber flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">4</span>
+              <div>
+                <a href="/spec/00-overview" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Check conformance requirements</a>
+                <p class="text-sm text-nl-text-secondary">Review the three conformance tiers (Basic, Standard, Advanced) and what each requires.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Time commitment -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8 border-l-4 border-l-nl-cyan">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-nl-cyan shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div>
+                <h3 class="font-semibold text-nl-text mb-1">Time commitment</h3>
+                <p class="text-sm text-nl-text-secondary">~30 minutes to understand the basics, ~2-4 hours for a minimal implementation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTAs -->
+      <section class="pb-8">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/implement/getting-started" class="btn-primary">
+              Start Building
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+            <a href="/spec" class="btn-ghost">
+              Read the Spec
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span class="inline-flex items-center gap-2">Created by <a href="https://braincol.com" class="inline-flex items-center gap-1.5 text-nl-text-secondary hover:text-nl-text transition-colors"><img src="/braincol-logo.svg" alt="" class="h-4 w-4" />Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

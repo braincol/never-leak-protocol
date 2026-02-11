@@ -1,0 +1,454 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Getting Started — NL Protocol</title>
+    <meta name="description" content="Build your first NL Protocol-conformant system in 30 minutes. A practical step-by-step guide covering agent identity, scope grants, action execution, and output sanitization." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="implement" />
+
+    <main class="pt-20 pb-20">
+      <!-- Header -->
+      <section class="relative py-12 sm:py-20">
+        <div class="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full opacity-30 pointer-events-none" style="background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%); filter: blur(80px);"></div>
+
+        <div class="relative z-10 mx-auto max-w-3xl px-4 sm:px-6">
+          <a href="/implement" class="inline-flex items-center gap-2 text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors mb-8">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            Back to Implement
+          </a>
+          <span class="pill mb-6 inline-flex">Developer Guide</span>
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-5">
+            Getting Started with <span class="gradient-text">NL Protocol</span>
+          </h1>
+          <div class="flex items-center gap-4 text-sm text-nl-text-tertiary">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              ~15 min read
+            </span>
+            <span class="text-nl-border">|</span>
+            <span>Basic Conformance (Levels 1-3)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Content -->
+      <section class="mx-auto max-w-3xl px-4 sm:px-6">
+
+        <!-- Table of Contents -->
+        <nav class="glass-card p-6 mb-12">
+          <h2 class="text-sm font-semibold text-nl-text-tertiary uppercase tracking-widest font-mono mb-4">On this page</h2>
+          <ol class="space-y-2 text-sm">
+            <li><a href="#what-youll-build" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">1. What You'll Build</a></li>
+            <li><a href="#prerequisites" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">2. Prerequisites</a></li>
+            <li><a href="#core-architecture" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">3. Core Architecture</a></li>
+            <li><a href="#step-1-agent-identity" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">4. Step 1: Agent Identity (Level 1)</a></li>
+            <li><a href="#step-2-scope-grants" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">5. Step 2: Scope Grants (Level 2)</a></li>
+            <li><a href="#step-3-action-execution" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">6. Step 3: Action Execution (Level 2 + 3)</a></li>
+            <li><a href="#step-4-output-sanitization" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">7. Step 4: Output Sanitization (Level 2)</a></li>
+            <li><a href="#whats-next" class="text-nl-text-secondary hover:text-nl-cyan transition-colors">8. What's Next?</a></li>
+          </ol>
+        </nav>
+
+        <!-- Section 1: What You'll Build -->
+        <div id="what-youll-build" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 font-mono">1</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">What You'll Build</h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-4">
+            In this guide, you'll build a minimal NL Protocol implementation that achieves <strong class="text-nl-text">Basic conformance (Levels 1-3)</strong>. This covers the three foundational security layers:
+          </p>
+          <div class="grid sm:grid-cols-3 gap-4 mt-6">
+            <div class="glass-card p-4">
+              <div class="text-nl-cyan font-mono text-xs mb-2">Level 1</div>
+              <div class="font-semibold text-nl-text text-sm mb-1">Agent Identity</div>
+              <p class="text-xs text-nl-text-secondary">Cryptographic identity for every agent interacting with secrets.</p>
+            </div>
+            <div class="glass-card p-4">
+              <div class="text-nl-cyan font-mono text-xs mb-2">Level 2</div>
+              <div class="font-semibold text-nl-text text-sm mb-1">Action-Based Access</div>
+              <p class="text-xs text-nl-text-secondary">Agents request actions, not secrets. Scoped grants govern access.</p>
+            </div>
+            <div class="glass-card p-4">
+              <div class="text-nl-cyan font-mono text-xs mb-2">Level 3</div>
+              <div class="font-semibold text-nl-text text-sm mb-1">Execution Isolation</div>
+              <p class="text-xs text-nl-text-secondary">Secrets exist only inside isolated subprocesses. Never in the agent's context.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Prerequisites -->
+        <div id="prerequisites" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 font-mono">2</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">Prerequisites</h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            Before you start, make sure you have:
+          </p>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Understanding of HTTP APIs and JSON</strong> &mdash; the wire protocol uses standard JSON messages over HTTP, stdio, or WebSocket.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">A programming language that supports subprocesses and environment variables</strong> &mdash; Python, Node.js, Go, Rust, or any language with process spawning capabilities.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Basic understanding of cryptographic hashing (SHA-256)</strong> &mdash; used for audit trail integrity. You don't need to implement crypto from scratch; standard libraries work fine.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Section 3: Core Architecture -->
+        <div id="core-architecture" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 font-mono">3</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">Core Architecture</h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            The NL Protocol defines two primary components: the <strong class="text-nl-text">AI Agent</strong> (your application) and the <strong class="text-nl-text">NL Provider</strong> (the system you'll build). The agent sends action requests containing opaque handles. The provider resolves secrets, executes commands in isolation, and returns only results.
+          </p>
+          <div class="code-block p-4 sm:p-6 overflow-x-auto">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Architecture Overview</div>
+            <pre class="text-xs sm:text-sm leading-relaxed whitespace-pre">
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;    action_request     &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;   AI Agent   &#9474; &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; &#9474;  NL Provider  &#9474;
+&#9474;  (your app)  &#9474;                      &#9474;  (you build)  &#9474;
+&#9474;              &#9474; &#9668;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; &#9474;              &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;    action_response    &#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9474;
+                                      &#9474;  &#9474; Isolation &#9474; &#9474;
+                                      &#9474;  &#9474; Boundary  &#9474; &#9474;
+                                      &#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9474;
+                                      &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</pre>
+          </div>
+          <p class="text-nl-text-secondary text-sm mt-4 leading-relaxed">
+            The key insight: the agent <strong class="text-nl-text">never</strong> sees secret values. It works with handles like <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">{'{{nl:api-key}}'}</code>, and the NL Provider resolves them inside an isolation boundary that the agent cannot access.
+          </p>
+        </div>
+
+        <!-- Section 4: Step 1 - Agent Identity -->
+        <div id="step-1-agent-identity" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 font-mono">4</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">Step 1: Agent Identity <span class="text-nl-text-tertiary text-lg font-normal">(Level 1)</span></h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-4">
+            Every agent interacting with your system needs an <strong class="text-nl-text">Agent Identity Document (AID)</strong>. This is the foundation of the entire protocol &mdash; without identity, there is no access control.
+          </p>
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            Create a minimal AID for your agent:
+          </p>
+          <div class="code-block p-4 sm:p-6 overflow-x-auto">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Agent Identity Document (AID)</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment">// Minimal AID — the agent's passport</span>
+{`{`}
+  <span class="string">"agent_uri"</span>: <span class="string">"nl://mycompany/my-agent/1.0"</span>,
+  <span class="string">"display_name"</span>: <span class="string">"My Agent"</span>,
+  <span class="string">"scope"</span>: [<span class="string">"secrets/api-key"</span>, <span class="string">"secrets/db-password"</span>],
+  <span class="string">"trust_level"</span>: <span class="string">"L1"</span>,
+  <span class="string">"created_at"</span>: <span class="string">"2026-01-15T00:00:00Z"</span>,
+  <span class="string">"expires_at"</span>: <span class="string">"2027-01-15T00:00:00Z"</span>
+{`}`}</pre>
+          </div>
+
+          <div class="mt-6 space-y-4">
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-overlay flex items-center justify-center text-xs font-mono text-nl-cyan shrink-0 mt-0.5">1</span>
+              <div>
+                <strong class="text-nl-text">agent_uri</strong>
+                <span class="text-nl-text-secondary"> &mdash; The unique identifier for this agent. Uses the <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">nl://</code> URI scheme. Format: <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">nl://org/name/version</code>.</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-overlay flex items-center justify-center text-xs font-mono text-nl-cyan shrink-0 mt-0.5">2</span>
+              <div>
+                <strong class="text-nl-text">scope</strong>
+                <span class="text-nl-text-secondary"> &mdash; Defines the maximum set of secrets this agent is allowed to access. This is the upper bound; actual access is further restricted by scope grants.</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-overlay flex items-center justify-center text-xs font-mono text-nl-cyan shrink-0 mt-0.5">3</span>
+              <div>
+                <strong class="text-nl-text">trust_level</strong>
+                <span class="text-nl-text-secondary"> &mdash; Determines the agent's capabilities. L0 = untrusted, L1 = basic verified, L2 = attested, L3 = hardware-attested. Start with L1.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Step 2 - Scope Grants -->
+        <div id="step-2-scope-grants" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 font-mono">5</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">Step 2: Scope Grants <span class="text-nl-text-tertiary text-lg font-normal">(Level 2)</span></h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-4">
+            A scope grant authorizes a specific agent to use a specific secret for specific actions, under specific conditions. This is the per-task, per-secret access control that makes NL Protocol different from traditional secret management.
+          </p>
+          <div class="code-block p-4 sm:p-6 overflow-x-auto">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Scope Grant</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment">// Grant: allow my-agent to exec with api-key</span>
+{`{`}
+  <span class="string">"agent_uri"</span>: <span class="string">"nl://mycompany/my-agent/1.0"</span>,
+  <span class="string">"secret"</span>: <span class="string">"secrets/api-key"</span>,
+  <span class="string">"actions"</span>: [<span class="string">"exec"</span>],
+  <span class="string">"conditions"</span>: {`{`}
+    <span class="string">"valid_until"</span>: <span class="string">"2026-06-01T00:00:00Z"</span>,
+    <span class="string">"max_uses"</span>: <span class="keyword">1000</span>
+  {`}`}
+{`}`}</pre>
+          </div>
+
+          <p class="text-nl-text-secondary leading-relaxed mt-6 mb-4">
+            When an action request arrives, the NL Provider evaluates access through a strict chain:
+          </p>
+
+          <div class="glass-card p-6 mt-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-2 text-sm">
+              <span class="flex items-center gap-2 text-nl-cyan font-medium">
+                <span class="w-6 h-6 rounded-full bg-nl-cyan/10 flex items-center justify-center text-xs font-mono">1</span>
+                Verify agent identity
+              </span>
+              <span class="text-nl-text-tertiary hidden sm:inline">&rarr;</span>
+              <span class="flex items-center gap-2 text-nl-violet font-medium">
+                <span class="w-6 h-6 rounded-full bg-nl-violet/10 flex items-center justify-center text-xs font-mono">2</span>
+                Check AID scope
+              </span>
+              <span class="text-nl-text-tertiary hidden sm:inline">&rarr;</span>
+              <span class="flex items-center gap-2 text-nl-green font-medium">
+                <span class="w-6 h-6 rounded-full bg-nl-green/10 flex items-center justify-center text-xs font-mono">3</span>
+                Check scope grant
+              </span>
+              <span class="text-nl-text-tertiary hidden sm:inline">&rarr;</span>
+              <span class="flex items-center gap-2 text-nl-amber font-medium">
+                <span class="w-6 h-6 rounded-full bg-nl-amber/10 flex items-center justify-center text-xs font-mono">4</span>
+                Check conditions
+              </span>
+            </div>
+          </div>
+
+          <p class="text-nl-text-secondary text-sm mt-4 leading-relaxed">
+            Every check must pass. If the agent's AID doesn't include the requested secret in its scope, access is denied even if a scope grant exists. If the scope grant has expired or exhausted its <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">max_uses</code>, access is denied.
+          </p>
+        </div>
+
+        <!-- Section 6: Step 3 - Action Execution -->
+        <div id="step-3-action-execution" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 font-mono">6</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">Step 3: Action Execution <span class="text-nl-text-tertiary text-lg font-normal">(Level 2 + 3)</span></h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-4">
+            This is where the core security guarantee is enforced. When an agent sends an action request, the NL Provider processes it through a strict pipeline:
+          </p>
+
+          <ol class="space-y-4 mb-8">
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">1</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Receive</strong> action_request JSON from the agent</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">2</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Verify</strong> agent identity (AID lookup)</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">3</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Check</strong> scope grant covers the requested secret and action type</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">4</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Resolve</strong> <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">{'{{nl:secret-name}}'}</code> placeholders with actual secret values</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">5</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Execute</strong> command in an isolated subprocess (no shell expansion!)</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">6</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Capture</strong> stdout, stderr, and exit_code from the subprocess</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">7</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Scan</strong> output for leaked secret values and replace with <code class="text-nl-cyan font-mono text-sm bg-nl-overlay px-1.5 py-0.5 rounded">[NL-REDACTED:name]</code></span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-nl-green/10 flex items-center justify-center text-xs font-mono text-nl-green shrink-0 mt-0.5">8</span>
+              <span class="text-nl-text-secondary"><strong class="text-nl-text">Return</strong> action_response to the agent (result only, never secrets)</span>
+            </li>
+          </ol>
+
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            Here's the core execution logic in pseudocode:
+          </p>
+
+          <div class="code-block p-4 sm:p-6 overflow-x-auto">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Action Execution — Pseudocode</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="keyword">function</span> <span class="function">execute_action</span>(request):
+  <span class="comment">// 1. Identity verification</span>
+  agent = <span class="function">lookup_aid</span>(request.agent_id)
+  <span class="keyword">if</span> agent is null:
+    <span class="keyword">return</span> error(<span class="string">"unknown agent"</span>)
+
+  <span class="comment">// 2. Scope grant check</span>
+  grant = <span class="function">find_grant</span>(agent.uri, request.secret, request.action_type)
+  <span class="keyword">if</span> grant is null or grant.expired or grant.uses_exhausted:
+    <span class="keyword">return</span> error(<span class="string">"access denied"</span>)
+
+  <span class="comment">// 3. Resolve placeholders inside isolation boundary</span>
+  resolved_cmd = request.template
+  <span class="keyword">for each</span> handle in <span class="function">extract_handles</span>(resolved_cmd):
+    secret_value = <span class="function">secret_store.get</span>(handle.name)
+    resolved_cmd = resolved_cmd.<span class="function">replace</span>(handle.placeholder, secret_value)
+
+  <span class="comment">// 4. Execute in isolated subprocess — NO shell expansion</span>
+  process = <span class="function">spawn_subprocess</span>(
+    cmd:   resolved_cmd,
+    shell: <span class="keyword">false</span>,         <span class="comment">// Critical: never use shell=true</span>
+    env:   {`{}`},            <span class="comment">// Clean environment</span>
+    timeout: <span class="keyword">30</span>s
+  )
+  stdout, stderr, exit_code = process.<span class="function">wait</span>()
+
+  <span class="comment">// 5. Sanitize output — remove any leaked secret values</span>
+  stdout = <span class="function">sanitize_output</span>(stdout, secrets_used)
+  stderr = <span class="function">sanitize_output</span>(stderr, secrets_used)
+
+  <span class="comment">// 6. Return result (never the secret)</span>
+  <span class="keyword">return</span> {`{`}
+    status:    <span class="string">"success"</span>,
+    exit_code: exit_code,
+    stdout:    stdout,
+    stderr:    stderr
+  {`}`}</pre>
+          </div>
+
+          <div class="glass-card p-4 mt-6 border-l-2 border-nl-amber">
+            <div class="flex items-start gap-3">
+              <span class="text-nl-amber text-lg shrink-0">!</span>
+              <div>
+                <strong class="text-nl-text text-sm">Critical: No shell expansion</strong>
+                <p class="text-xs text-nl-text-secondary mt-1 leading-relaxed">
+                  Always spawn subprocesses without a shell (<code class="text-nl-cyan font-mono bg-nl-overlay px-1 py-0.5 rounded">shell=false</code>). Shell expansion can be exploited to exfiltrate secrets via environment variable interpolation, command substitution, or globbing.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: Step 4 - Output Sanitization -->
+        <div id="step-4-output-sanitization" class="mb-16">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 font-mono">7</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">Step 4: Output Sanitization <span class="text-nl-text-tertiary text-lg font-normal">(Level 2)</span></h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-4">
+            After execution, scan <strong class="text-nl-text">ALL</strong> output for secret values before returning anything to the agent. This is the last line of defense &mdash; even if a command somehow echoes a secret, the agent won't see it.
+          </p>
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            Check for multiple encodings of each secret value:
+          </p>
+
+          <div class="grid sm:grid-cols-2 gap-4 mb-6">
+            <div class="glass-card p-4">
+              <div class="font-mono text-sm text-nl-text mb-1">Plaintext match</div>
+              <p class="text-xs text-nl-text-secondary">Direct string comparison of the raw secret value against output.</p>
+            </div>
+            <div class="glass-card p-4">
+              <div class="font-mono text-sm text-nl-text mb-1">Base64-encoded</div>
+              <p class="text-xs text-nl-text-secondary">Check for <code class="text-nl-cyan font-mono bg-nl-overlay px-1 py-0.5 rounded text-xs">base64(secret_value)</code> in the output.</p>
+            </div>
+            <div class="glass-card p-4">
+              <div class="font-mono text-sm text-nl-text mb-1">URL-encoded</div>
+              <p class="text-xs text-nl-text-secondary">Check for percent-encoded version (<code class="text-nl-cyan font-mono bg-nl-overlay px-1 py-0.5 rounded text-xs">%XX</code> sequences).</p>
+            </div>
+            <div class="glass-card p-4">
+              <div class="font-mono text-sm text-nl-text mb-1">Hex-encoded</div>
+              <p class="text-xs text-nl-text-secondary">Check for hexadecimal representation of the secret bytes.</p>
+            </div>
+          </div>
+
+          <p class="text-nl-text-secondary leading-relaxed mb-4">
+            Replace any match with a redaction marker that identifies the secret name but not its value:
+          </p>
+
+          <div class="code-block p-4 sm:p-6 overflow-x-auto">
+            <div class="text-nl-text-tertiary text-xs mb-3 font-mono uppercase tracking-widest">Sanitization Example</div>
+            <pre class="text-xs sm:text-sm leading-relaxed"><span class="comment">// Before sanitization (raw subprocess output)</span>
+<span class="string">"Connected to postgresql://admin:s3cr3t-p4ss@db.example.com/mydb"</span>
+
+<span class="comment">// After sanitization (what the agent receives)</span>
+<span class="string">"Connected to postgresql://admin:<span class="placeholder">[NL-REDACTED:db-password]</span>@db.example.com/mydb"</span></pre>
+          </div>
+        </div>
+
+        <!-- Section 8: What's Next -->
+        <div id="whats-next" class="mb-8">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-lg bg-nl-amber/10 text-nl-amber flex items-center justify-center text-sm font-bold shrink-0 font-mono">8</span>
+            <h2 class="text-2xl sm:text-3xl font-bold">What's Next?</h2>
+          </div>
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            Congratulations &mdash; you've built a system with <strong class="text-nl-text">Basic conformance (Levels 1-3)</strong>! Your implementation now ensures that agents never see secret values, access is scoped and conditional, and execution happens in isolation.
+          </p>
+          <p class="text-nl-text-secondary leading-relaxed mb-6">
+            To reach <strong class="text-nl-text">Standard conformance (Levels 1-5)</strong>, add these two additional layers:
+          </p>
+
+          <div class="space-y-4 mb-8">
+            <div class="glass-card p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-xs font-mono font-bold shrink-0">L4</span>
+                <strong class="text-nl-text">Pre-Execution Defense</strong>
+              </div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Before resolving secrets, analyze the command template for dangerous patterns. Deny rules can block commands that attempt to exfiltrate data (e.g., piping to <code class="text-nl-cyan font-mono text-xs bg-nl-overlay px-1 py-0.5 rounded">curl</code>, writing to network sockets, or encoding output).
+              </p>
+            </div>
+            <div class="glass-card p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-xs font-mono font-bold shrink-0">L5</span>
+                <strong class="text-nl-text">Audit Trail</strong>
+              </div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed">
+                Create a SHA-256 hash-chained record for every action. Each record includes agent identity, action type, secret handle (not value), timestamp, and the hash of the previous record. This produces a tamper-evident log.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/spec" class="btn-primary">
+              Read Full Specification
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            </a>
+            <a href="/#conformance" class="btn-ghost">
+              View Conformance Tiers
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            </a>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span class="inline-flex items-center gap-2">Created by <a href="https://braincol.com" class="inline-flex items-center gap-1.5 text-nl-text-secondary hover:text-nl-text transition-colors"><img src="/braincol-logo.svg" alt="" class="h-4 w-4" />Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

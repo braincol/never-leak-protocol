@@ -1,0 +1,130 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+
+const concepts = [
+  {
+    title: 'Opaque Handles',
+    description: 'How agents interact with secrets without seeing them',
+    link: '/learn/opaque-handles',
+    color: 'cyan',
+    icon: '{ }',
+    readTime: '5 min read',
+  },
+  {
+    title: 'Scope Grants',
+    description: 'Per-agent, per-secret, time-bounded access control',
+    link: '/learn/scope-grants',
+    color: 'cyan',
+    icon: '#',
+    readTime: '5 min read',
+  },
+  {
+    title: 'Delegation Tokens',
+    description: 'Secure multi-agent pipelines with bounded trust',
+    link: '/learn/delegation-tokens',
+    color: 'violet',
+    icon: '>>',
+    readTime: '5 min read',
+  },
+  {
+    title: 'Audit Trails',
+    description: 'Tamper-evident, cryptographically chained records',
+    link: '/learn/audit-trails',
+    color: 'green',
+    icon: '#!',
+    readTime: '5 min read',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learn the Protocol — NL Protocol</title>
+    <meta name="description" content="Understand the core concepts behind the Never-Leak Protocol. Learn about opaque handles, scope grants, delegation tokens, and tamper-evident audit trails." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="learn" />
+    <main class="pt-20 pb-20">
+
+      <!-- Header -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 mb-12 sm:mb-16 text-center">
+        <span class="pill mb-6 inline-flex">Education</span>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+          Learn the Protocol
+        </h1>
+        <p class="text-sm sm:text-base text-nl-text-secondary max-w-2xl mx-auto leading-relaxed">
+          Understand the core concepts behind the Never-Leak Protocol before diving into the specification. Each article is a self-contained, 5-minute read.
+        </p>
+      </div>
+
+      <!-- Concept Cards Grid -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 mb-16 sm:mb-20">
+        <div class="grid sm:grid-cols-2 gap-5">
+          {concepts.map((concept, i) => (
+            <a href={concept.link} class="glass-card shimmer-border p-6 group transition-colors block">
+              <div class="flex items-center gap-3 mb-4">
+                <span class={`
+                  w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-mono
+                  ${concept.color === 'cyan' ? 'bg-nl-cyan/10 text-nl-cyan' : ''}
+                  ${concept.color === 'violet' ? 'bg-nl-violet/10 text-nl-violet' : ''}
+                  ${concept.color === 'green' ? 'bg-nl-green/10 text-nl-green' : ''}
+                `}>
+                  {concept.icon}
+                </span>
+                <div>
+                  <div class="font-semibold text-nl-text">{concept.title}</div>
+                  <div class="text-xs text-nl-text-tertiary font-mono">{concept.readTime}</div>
+                </div>
+              </div>
+              <p class="text-sm text-nl-text-secondary leading-relaxed mb-4">
+                {concept.description}
+              </p>
+              <span class={`
+                text-sm transition-colors
+                ${concept.color === 'cyan' ? 'text-nl-text-tertiary group-hover:text-nl-cyan' : ''}
+                ${concept.color === 'violet' ? 'text-nl-text-tertiary group-hover:text-nl-violet' : ''}
+                ${concept.color === 'green' ? 'text-nl-text-tertiary group-hover:text-nl-green' : ''}
+              `}>
+                Read article &rarr;
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Next Steps -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6">
+        <div class="text-center mb-8">
+          <h2 class="text-xl sm:text-2xl font-bold mb-2">Next Steps</h2>
+          <p class="text-sm text-nl-text-secondary">Ready to go deeper?</p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+          <a href="/implement/getting-started" class="glass-card p-6 group transition-colors block text-center">
+            <div class="font-semibold text-nl-text mb-2">Ready to implement?</div>
+            <p class="text-sm text-nl-text-secondary mb-3">Step-by-step guides for building NL-compliant systems.</p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-green transition-colors">Get started &rarr;</span>
+          </a>
+          <a href="/spec" class="glass-card p-6 group transition-colors block text-center">
+            <div class="font-semibold text-nl-text mb-2">Dive into the full spec</div>
+            <p class="text-sm text-nl-text-secondary mb-3">Nine chapters of technical specification.</p>
+            <span class="text-sm text-nl-text-tertiary group-hover:text-nl-cyan transition-colors">Read the spec &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span class="inline-flex items-center gap-2">Created by <a href="https://braincol.com" class="inline-flex items-center gap-1.5 text-nl-text-secondary hover:text-nl-text transition-colors"><img src="/braincol-logo.svg" alt="" class="h-4 w-4" />Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NL Protocol for Enterprise & Operations — NL Protocol</title>
+    <meta name="description" content="Platform engineering and infrastructure teams: learn about NL Protocol deployment models, operational considerations, compliance requirements, and key management." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <Navbar current="home" />
+    <main class="pt-20 pb-20">
+
+      <!-- Back link -->
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 pt-8">
+        <a href="/get-started" class="text-sm text-nl-text-tertiary hover:text-nl-text-secondary transition-colors inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          All paths
+        </a>
+      </div>
+
+      <!-- Hero -->
+      <section class="py-12 sm:py-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <span class="pill mb-6 inline-flex" style="border-color: rgba(251,191,36,0.2); color: #FBBF24; background: rgba(251,191,36,0.05);">Operations Guide</span>
+          <h1 class="text-3xl sm:text-5xl font-extrabold mb-5 tracking-tight">
+            NL Protocol for <span class="gradient-text">Enterprise & Operations</span>
+          </h1>
+          <p class="text-lg text-nl-text-secondary max-w-3xl leading-relaxed">
+            Deploy and operate NL Protocol at scale. Deployment models, compliance, key management, and operational runbooks.
+          </p>
+        </div>
+      </section>
+
+      <!-- You are -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8">
+            <div class="flex items-start gap-4">
+              <span class="w-10 h-10 rounded-xl bg-nl-amber/10 text-nl-amber flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </span>
+              <div>
+                <h2 class="font-semibold text-nl-text text-lg mb-2">You are</h2>
+                <p class="text-nl-text-secondary leading-relaxed">
+                  A platform engineering team, infrastructure team, or operations organization running AI agents in production and needing to govern how those agents access secrets at scale.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key areas -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Key areas of focus</h2>
+          <div class="glass-card p-6 sm:p-8">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Deployment models</strong> &mdash; local-first, centralized, hybrid, and multi-region topologies for NL-compliant systems</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Operational runbooks</strong> &mdash; monitoring, alerting, incident response, and secret rotation procedures for production environments</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Compliance requirements</strong> &mdash; mapping NL Protocol conformance tiers to SOC 2, ISO 27001, and industry-specific regulations</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-nl-green mt-0.5 shrink-0">&#10003;</span>
+                <span class="text-nl-text-secondary"><strong class="text-nl-text">Key management</strong> &mdash; cryptographic key lifecycle, rotation policies, HSM integration, and disaster recovery</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recommended path -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <h2 class="text-2xl font-bold mb-6">Recommended path</h2>
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-cyan/10 text-nl-cyan flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">1</span>
+              <div>
+                <a href="/learn/concepts" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Understand core concepts</a>
+                <p class="text-sm text-nl-text-secondary">The foundational architecture: opaque handles, isolation boundaries, and the seven-layer defense model.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-violet/10 text-nl-violet flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">2</span>
+              <div>
+                <a href="/spec/00-overview" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Read the spec overview</a>
+                <p class="text-sm text-nl-text-secondary">High-level architecture, conformance tiers, and the requirements for each level of protection.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-green/10 text-nl-green flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">3</span>
+              <div>
+                <a href="/spec" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Review deployment considerations</a>
+                <p class="text-sm text-nl-text-secondary">Topology options, scaling patterns, key management requirements, and operational procedures.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-lg bg-nl-amber/10 text-nl-amber flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">4</span>
+              <div>
+                <a href="/#conformance" class="font-semibold text-nl-text hover:text-nl-cyan transition-colors mb-1 inline-block">Map conformance to your requirements</a>
+                <p class="text-sm text-nl-text-secondary">Choose the right conformance tier based on your regulatory environment and operational maturity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Time commitment -->
+      <section class="pb-12">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="glass-card p-6 sm:p-8 border-l-4 border-l-nl-amber">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-nl-amber shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div>
+                <h3 class="font-semibold text-nl-text mb-1">Time commitment</h3>
+                <p class="text-sm text-nl-text-secondary">~20 minutes for the architecture overview, ~1-2 hours for deployment planning and compliance mapping.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTAs -->
+      <section class="pb-8">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/spec/00-overview" class="btn-primary">
+              Read Spec Overview
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+            <a href="/#conformance" class="btn-ghost">
+              View Conformance
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="border-t border-nl-border py-8">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-nl-text-tertiary">
+        <span>Never-Leak Protocol v1.0</span>
+        <span class="inline-flex items-center gap-2">Created by <a href="https://braincol.com" class="inline-flex items-center gap-1.5 text-nl-text-secondary hover:text-nl-text transition-colors"><img src="/braincol-logo.svg" alt="" class="h-4 w-4" />Braincol</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
